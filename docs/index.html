@@ -1,0 +1,2145 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Situation Analysis | OSINT Intelligence Briefing — 28 Feb – 01 Mar 2026</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&family=Orbitron:wght@700;900&family=Share+Tech+Mono&display=swap"
+        rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <style>
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0
+        }
+
+        :root {
+            --bg: #04080f;
+            --surface: #080f1e;
+            --card: #0b1628;
+            --card2: #0e1c32;
+            --border: rgba(255, 255, 255, 0.06);
+            --red: #ef4444;
+            --orange: #f97316;
+            --amber: #f59e0b;
+            --green: #22c55e;
+            --cyan: #06b6d4;
+            --blue: #3b82f6;
+            --purple: #a855f7;
+            --gold: #d4af37;
+            --text: #e2e8f0;
+            --muted: #64748b;
+        }
+
+        html {
+            scroll-behavior: smooth
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background: repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.03) 0px, rgba(0, 0, 0, 0.03) 1px, transparent 1px, transparent 3px);
+            pointer-events: none;
+            z-index: 9999;
+        }
+
+        body::after {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image: linear-gradient(rgba(6, 182, 212, .025) 1px, transparent 1px), linear-gradient(90deg, rgba(6, 182, 212, .025) 1px, transparent 1px);
+            background-size: 50px 50px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .page-wrap {
+            position: relative;
+            z-index: 1;
+            padding-bottom: 60px;
+        }
+
+        /* TOPBAR */
+        .topbar {
+            background: linear-gradient(90deg, #0a0f1e, #040810 50%, #0a0f1e);
+            border-bottom: 1px solid var(--border);
+            padding: 10px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .topbar-logo {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 13px;
+            font-weight: 900;
+            letter-spacing: 2px;
+            color: #fff;
+        }
+
+        .topbar-logo span {
+            color: var(--red);
+        }
+
+        .topbar-right {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .pill {
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            padding: 4px 12px;
+            border-radius: 20px;
+            border: 1px solid;
+        }
+
+        .pill-red {
+            background: rgba(239, 68, 68, 0.1);
+            border-color: rgba(239, 68, 68, 0.3);
+            color: var(--red);
+        }
+
+        .pill-cyan {
+            background: rgba(6, 182, 212, 0.1);
+            border-color: rgba(6, 182, 212, 0.3);
+            color: var(--cyan);
+        }
+
+        .pill-amber {
+            background: rgba(245, 158, 11, 0.1);
+            border-color: rgba(245, 158, 11, 0.3);
+            color: var(--amber);
+        }
+
+        .live-dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: var(--red);
+            display: inline-block;
+            margin-right: 5px;
+            animation: blink 1.2s ease-in-out infinite;
+        }
+
+        @keyframes blink {
+
+            0%,
+            100% {
+                opacity: 1
+            }
+
+            50% {
+                opacity: .2
+            }
+        }
+
+        /* PAGE HEADER */
+        .page-header {
+            text-align: center;
+            padding: 32px 24px 24px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .page-header::before {
+            content: 'CLASSIFIED ─ OSINT OPEN SOURCE INTELLIGENCE ─ VERIFIED SOURCE DATA';
+            display: block;
+            font-size: 10px;
+            letter-spacing: 3px;
+            color: var(--red);
+            margin-bottom: 10px;
+            font-family: 'Share Tech Mono', monospace;
+        }
+
+        .page-header h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: clamp(18px, 3.5vw, 30px);
+            font-weight: 900;
+            color: #fff;
+            letter-spacing: 2px;
+            line-height: 1.1;
+        }
+
+        .page-header h1 span {
+            color: var(--gold);
+        }
+
+        .page-header .sub {
+            font-size: 12px;
+            color: var(--muted);
+            margin-top: 7px;
+            letter-spacing: .8px;
+        }
+
+        .src-bar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: center;
+            margin-top: 12px;
+        }
+
+        .src-tag {
+            font-size: 10px;
+            font-weight: 600;
+            padding: 3px 10px;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border);
+            color: #94a3b8;
+        }
+
+        /* TWO PANELS */
+        .panels {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0;
+        }
+
+        @media(max-width:900px) {
+            .panels {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .panel {
+            padding: 24px 20px 32px;
+            position: relative;
+        }
+
+        .panel-left {
+            border-right: 1px solid var(--border);
+            background: linear-gradient(180deg, rgba(239, 68, 68, 0.035) 0%, transparent 35%);
+        }
+
+        .panel-right {
+            background: linear-gradient(180deg, rgba(59, 130, 246, 0.035) 0%, transparent 35%);
+        }
+
+        /* PANEL HEADERS */
+        .panel-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 22px;
+            padding-bottom: 14px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .panel-icon {
+            width: 42px;
+            height: 42px;
+            border-radius: 10px;
+            display: grid;
+            place-items: center;
+            font-size: 20px;
+            flex-shrink: 0;
+        }
+
+        .pi-red {
+            background: rgba(239, 68, 68, 0.15);
+            border: 1px solid rgba(239, 68, 68, 0.35);
+        }
+
+        .pi-blue {
+            background: rgba(59, 130, 246, 0.15);
+            border: 1px solid rgba(59, 130, 246, 0.35);
+        }
+
+        .panel-title h2 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: #fff;
+        }
+
+        .panel-title p {
+            font-size: 11px;
+            color: var(--muted);
+            margin-top: 3px;
+        }
+
+        .panel-acc-line {
+            height: 2px;
+            flex: 1;
+            border-radius: 2px;
+        }
+
+        .pal-red {
+            background: linear-gradient(90deg, var(--red), transparent);
+        }
+
+        .pal-blue {
+            background: linear-gradient(90deg, var(--blue), transparent);
+        }
+
+        /* SECTION LABELS */
+        .section-label {
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--muted);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .section-label::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: var(--border);
+        }
+
+        /* CHART */
+        .chart-wrap {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 20px;
+        }
+
+        .chart-wrap canvas {
+            max-height: 240px;
+        }
+
+        /* CLAIM BLOCKS — dual narrative */
+        .claim-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .claim-card {
+            border-radius: 12px;
+            padding: 16px;
+            border: 1px solid;
+        }
+
+        .claim-pak {
+            background: linear-gradient(135deg, rgba(34, 197, 94, 0.08), transparent);
+            border-color: rgba(34, 197, 94, 0.25);
+        }
+
+        .claim-afg {
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.08), transparent);
+            border-color: rgba(239, 68, 68, 0.25);
+        }
+
+        .claim-header {
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .claim-header-pak {
+            color: var(--green);
+        }
+
+        .claim-header-afg {
+            color: var(--red);
+        }
+
+        .claim-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 12px;
+            color: #94a3b8;
+            padding: 5px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+        }
+
+        .claim-row:last-child {
+            border-bottom: none;
+        }
+
+        .claim-val {
+            font-family: 'Share Tech Mono', monospace;
+            font-weight: 700;
+            font-size: 13px;
+        }
+
+        .cv-green {
+            color: var(--green);
+        }
+
+        .cv-red {
+            color: var(--red);
+        }
+
+        .cv-amber {
+            color: var(--amber);
+        }
+
+        .cv-blue {
+            color: var(--blue);
+        }
+
+        .src-note {
+            font-size: 10px;
+            color: var(--muted);
+            margin-top: 8px;
+            font-style: italic;
+        }
+
+        /* MINI STAT STRIP */
+        .mini-stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 7px;
+            margin-bottom: 20px;
+        }
+
+        .mstat {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 9px;
+            padding: 11px;
+            text-align: center;
+        }
+
+        .mstat-val {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 19px;
+            font-weight: 900;
+            line-height: 1;
+        }
+
+        .mstat-lbl {
+            font-size: 9px;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: .8px;
+            margin-top: 4px;
+        }
+
+        /* TABLE */
+        .table-wrap {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 8px;
+        }
+
+        .styled-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 12px;
+        }
+
+        .styled-table th {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--red);
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            padding: 9px 12px;
+            text-align: left;
+            border-bottom: 1px solid rgba(239, 68, 68, 0.25);
+        }
+
+        .styled-table td {
+            padding: 10px 12px;
+            color: #cbd5e1;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .styled-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .styled-table tr:hover td {
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .group-badge {
+            font-weight: 700;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .group-dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+        }
+
+        .atk-num {
+            font-family: 'Share Tech Mono', monospace;
+            font-weight: 700;
+            font-size: 15px;
+        }
+
+        .atk-red {
+            color: var(--red);
+        }
+
+        .atk-amber {
+            color: var(--amber);
+        }
+
+        .atk-green {
+            color: var(--green);
+        }
+
+        .tag-sm {
+            font-size: 9px;
+            font-weight: 600;
+            padding: 2px 7px;
+            border-radius: 4px;
+            text-transform: uppercase;
+            letter-spacing: .5px;
+        }
+
+        .tag-mapped {
+            background: rgba(6, 182, 212, 0.15);
+            color: var(--cyan);
+            border: 1px solid rgba(6, 182, 212, 0.2);
+        }
+
+        .attack-bar {
+            height: 5px;
+            border-radius: 3px;
+            background: rgba(255, 255, 255, 0.08);
+            margin-top: 5px;
+            overflow: hidden;
+        }
+
+        .attack-fill {
+            height: 100%;
+            border-radius: 3px;
+            background: linear-gradient(90deg, var(--red), var(--orange));
+        }
+
+        /* LOCATION TAGS */
+        .loc-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px;
+            margin-bottom: 18px;
+        }
+
+        .loc-tag {
+            font-size: 10px;
+            font-weight: 600;
+            padding: 3px 8px;
+            border-radius: 5px;
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            color: #fca5a5;
+        }
+
+        /* RIGHT — OPERATIONS HEADER */
+        .ops-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .op-card {
+            border-radius: 12px;
+            padding: 18px 16px;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid;
+        }
+
+        .op-roaring {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.12), rgba(99, 102, 241, 0.06));
+            border-color: rgba(59, 130, 246, 0.3);
+        }
+
+        .op-epic {
+            background: linear-gradient(135deg, rgba(168, 85, 247, 0.1), rgba(59, 130, 246, 0.06));
+            border-color: rgba(168, 85, 247, 0.3);
+        }
+
+        .op-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+        }
+
+        .op-roaring::before {
+            background: linear-gradient(90deg, var(--blue), var(--cyan));
+        }
+
+        .op-epic::before {
+            background: linear-gradient(90deg, var(--purple), var(--blue));
+        }
+
+        .op-code {
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+        }
+
+        .op-roaring .op-code {
+            color: var(--blue);
+        }
+
+        .op-epic .op-code {
+            color: var(--purple);
+        }
+
+        .op-name {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 13px;
+            font-weight: 900;
+            color: #fff;
+            margin-bottom: 8px;
+            line-height: 1.2;
+        }
+
+        .op-stats {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .op-stat-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 11px;
+            color: #94a3b8;
+        }
+
+        .op-stat-val {
+            font-family: 'Share Tech Mono', monospace;
+            font-weight: 700;
+        }
+
+        .op-stat-val.blue {
+            color: var(--blue);
+        }
+
+        .op-stat-val.purple {
+            color: var(--purple);
+        }
+
+        .op-stat-val.red {
+            color: var(--red);
+        }
+
+        /* CASUALTIES BLOCK */
+        .cas-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .cas-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 13px;
+            text-align: center;
+        }
+
+        .cas-val {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 22px;
+            font-weight: 900;
+            line-height: 1;
+            margin-bottom: 4px;
+        }
+
+        .cas-lbl {
+            font-size: 9px;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: .8px;
+        }
+
+        .cas-sub {
+            font-size: 9px;
+            color: var(--muted);
+            margin-top: 2px;
+        }
+
+        /* VIPs */
+        .vips {
+            background: var(--card);
+            border: 1px solid rgba(239, 68, 68, 0.25);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 20px;
+        }
+
+        .vip-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .vip-row:last-child {
+            border-bottom: none;
+        }
+
+        .vip-status {
+            font-size: 10px;
+            font-weight: 700;
+            padding: 3px 9px;
+            border-radius: 20px;
+            white-space: nowrap;
+        }
+
+        .vs-killed {
+            background: rgba(239, 68, 68, 0.2);
+            color: var(--red);
+            border: 1px solid rgba(239, 68, 68, .3);
+        }
+
+        .vs-unknown {
+            background: rgba(245, 158, 11, 0.15);
+            color: var(--amber);
+            border: 1px solid rgba(245, 158, 11, .3);
+        }
+
+        .vip-name {
+            font-size: 13px;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .vip-role {
+            font-size: 10px;
+            color: var(--muted);
+        }
+
+        /* RETALIATION TABLE */
+        .ret-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 12px;
+            background: var(--card);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .ret-table th {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--red);
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: 1.2px;
+            text-transform: uppercase;
+            padding: 8px 12px;
+            text-align: left;
+            border-bottom: 1px solid rgba(239, 68, 68, 0.25);
+        }
+
+        .ret-table td {
+            padding: 9px 12px;
+            border-bottom: 1px solid var(--border);
+            color: #cbd5e1;
+        }
+
+        .ret-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .ret-table tr:hover td {
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .status-badge {
+            font-size: 9px;
+            font-weight: 700;
+            padding: 2px 8px;
+            border-radius: 10px;
+            text-transform: uppercase;
+            letter-spacing: .5px;
+        }
+
+        .sb-hit {
+            background: rgba(239, 68, 68, 0.15);
+            border: 1px solid rgba(239, 68, 68, .25);
+            color: var(--red);
+        }
+
+        .sb-intercept {
+            background: rgba(34, 197, 94, 0.12);
+            border: 1px solid rgba(34, 197, 94, .2);
+            color: var(--green);
+        }
+
+        .sb-minor {
+            background: rgba(245, 158, 11, 0.12);
+            border: 1px solid rgba(245, 158, 11, .2);
+            color: var(--amber);
+        }
+
+        .flag {
+            font-size: 16px;
+        }
+
+        .table-wrap2 {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 18px;
+        }
+
+        /* ALLIANCE BLOCS */
+        .alliances-wrap {
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            overflow: hidden;
+            margin-bottom: 16px;
+        }
+
+        .alliances-header {
+            background: rgba(255, 255, 255, 0.04);
+            padding: 10px 16px;
+            border-bottom: 1px solid var(--border);
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--muted);
+        }
+
+        .alliances-body {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1px;
+            background: var(--border);
+        }
+
+        .bloc {
+            padding: 18px 16px;
+        }
+
+        .bloc-a {
+            background: linear-gradient(160deg, rgba(59, 130, 246, 0.1), rgba(6, 182, 212, 0.05));
+        }
+
+        .bloc-b {
+            background: linear-gradient(160deg, rgba(239, 68, 68, 0.09), rgba(168, 85, 247, 0.05));
+        }
+
+        .bloc-label {
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 7px;
+        }
+
+        .bloc-a .bloc-label {
+            color: var(--cyan);
+        }
+
+        .bloc-b .bloc-label {
+            color: var(--red);
+        }
+
+        .bi {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+        }
+
+        .bi-a {
+            background: var(--cyan);
+            box-shadow: 0 0 6px var(--cyan);
+        }
+
+        .bi-b {
+            background: var(--red);
+            box-shadow: 0 0 6px var(--red);
+        }
+
+        .bloc-members {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .bloc-member {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12px;
+            font-weight: 600;
+            color: #fff;
+        }
+
+        .member-role {
+            font-size: 9px;
+            color: var(--muted);
+            font-weight: 400;
+        }
+
+        /* SM REACH BANNER */
+        .sm-bar {
+            background: linear-gradient(90deg, rgba(6, 182, 212, 0.08), rgba(59, 130, 246, 0.05));
+            border: 1px solid rgba(6, 182, 212, 0.15);
+            border-radius: 10px;
+            padding: 12px 16px;
+            margin-bottom: 18px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .sm-item {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            font-size: 12px;
+            color: #94a3b8;
+        }
+
+        .sm-val {
+            font-family: 'Share Tech Mono', monospace;
+            font-weight: 700;
+            color: var(--cyan);
+        }
+
+        /* AIRSPACE WARNING */
+        .airspace {
+            background: linear-gradient(90deg, rgba(245, 158, 11, 0.08), transparent);
+            border: 1px solid rgba(245, 158, 11, 0.2);
+            border-radius: 10px;
+            padding: 12px 14px;
+            margin-bottom: 18px;
+            font-size: 12px;
+            color: #fcd34d;
+            display: flex;
+            gap: 8px;
+            align-items: flex-start;
+        }
+
+        /* FOOTER */
+        .page-footer {
+            text-align: center;
+            padding: 18px;
+            border-top: 1px solid var(--border);
+            font-size: 11px;
+            color: var(--muted);
+            margin-top: 16px;
+        }
+
+        .page-footer span {
+            color: var(--red);
+        }
+
+        /* RESPONSIVE OPTIMIZATIONS */
+        @media (min-width: 1920px) {
+            .page-wrap {
+                max-width: 1920px;
+                margin: 0 auto;
+            }
+
+            .page-header h1 {
+                font-size: 30px;
+            }
+
+            .panel {
+                padding: 28px 24px 36px;
+            }
+
+            .mstat-val {
+                font-size: 22px;
+            }
+
+            .cas-val {
+                font-size: 24px;
+            }
+
+            .op-name {
+                font-size: 14px;
+            }
+        }
+
+        @media (max-width: 1440px) {
+            .page-header h1 {
+                font-size: 24px;
+            }
+
+            .panel {
+                padding: 20px 16px 28px;
+            }
+
+            .mstat-val {
+                font-size: 17px;
+            }
+
+            .cas-val {
+                font-size: 20px;
+            }
+        }
+
+        @media (max-width: 1280px) {
+            .page-header h1 {
+                font-size: 20px;
+            }
+
+            .mini-stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .cas-grid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 6px;
+            }
+
+            .claim-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .ops-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 1024px) {
+            body {
+                font-size: 13px;
+            }
+
+            .page-header h1 {
+                font-size: 18px;
+            }
+
+            .panel {
+                padding: 16px 14px 24px;
+            }
+
+            .mstat-val {
+                font-size: 15px;
+            }
+
+            .cas-val {
+                font-size: 18px;
+            }
+
+            .vip-name {
+                font-size: 12px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .topbar {
+                padding: 8px 12px;
+            }
+
+            .page-header {
+                padding: 20px 12px 16px;
+            }
+
+            .page-header h1 {
+                font-size: 16px;
+            }
+
+            .panel {
+                padding: 12px 10px 20px;
+            }
+
+            .mini-stats {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 5px;
+            }
+
+            .cas-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .claim-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .ops-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .loc-tags {
+                gap: 3px;
+            }
+
+            .vip-name {
+                font-size: 11px;
+            }
+
+            .vip-role {
+                font-size: 9px;
+            }
+
+            /* Map mobile layout */
+            #mapPage>.map-layout {
+                flex-direction: column !important;
+            }
+
+            #mapPage>.map-layout>div:first-child {
+                flex: 0 0 50% !important;
+            }
+
+            #mapPage>.map-layout>div:last-child {
+                flex: 0 0 50% !important;
+            }
+        }
+
+        /* SCROLL REVEAL */
+        .reveal {
+            opacity: 0;
+            transform: translateY(14px);
+            transition: opacity .5s ease, transform .5s ease;
+        }
+
+        .reveal.vis {
+            opacity: 1;
+            transform: none;
+        }
+    </style>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <style>
+        .leaflet-container {
+            background: var(--bg);
+            font-family: 'Inter', sans-serif;
+        }
+
+        .leaflet-popup-content-wrapper {
+            background: #0b1628;
+            color: #e2e8f0;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+        }
+
+        .leaflet-popup-tip {
+            background: #0b1628;
+        }
+
+        .map-news-item {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 8px 0;
+            font-size: 11px;
+            color: #94a3b8;
+        }
+
+        .map-news-item:last-child {
+            border-bottom: none;
+        }
+
+        .map-news-acc {
+            color: #3b82f6;
+            font-weight: bold;
+        }
+
+        #newsFeed::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        #newsFeed::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        #newsFeed::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 4px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="page-wrap">
+
+        <!-- TOPBAR -->
+        <div class="topbar">
+            <div class="topbar-logo">OSINT <span>CMD</span> · SITUATION ANALYSIS</div>
+            <div class="topbar-right">
+                <span class="pill pill-red"><span class="live-dot"></span>ACTIVE CONFLICT</span>
+                <span class="pill pill-amber">⚠ HIGH ESCALATION RISK</span>
+                <span class="pill pill-cyan">📅 01 MAR 2026 · 14:43 PKT</span>
+            </div>
+        </div>
+
+        <!-- PAGE HEADER -->
+        <div class="page-header">
+            <h1>TWO-THEATRE <span>SITUATION ANALYSIS</span></h1>
+            <p class="sub">Pakistan–Afghanistan · Iran–Israel–US · 28 Feb – 01 Mar 2026 · Multi-Source OSINT Verified
+            </p>
+            <div class="src-bar">
+                <span class="src-tag">DG ISPR</span>
+                <span class="src-tag">TTP Claims</span>
+                <span class="src-tag">Reuters</span>
+                <span class="src-tag">Al Jazeera</span>
+                <span class="src-tag">AP News</span>
+                <span class="src-tag">BBC</span>
+                <span class="src-tag">NYT</span>
+                <span class="src-tag">CNN</span>
+                <span class="src-tag">The Guardian</span>
+                <span class="src-tag">Wikipedia</span>
+            </div>
+        </div>
+
+        <!-- TWO PANELS -->
+        <div class="panels">
+
+            <!-- ══════════ LEFT PANEL ══════════ -->
+            <div class="panel panel-left reveal">
+                <div class="panel-header">
+                    <div class="panel-icon pi-red">🏔️</div>
+                    <div class="panel-title">
+                        <h2>Pak–Afghan Border Conflict</h2>
+                        <p>Feb 21–28, 2026 · Op Ghazab Lil Haq + TTP Op</p>
+                    </div>
+                    <div class="panel-acc-line pal-red"></div>
+                </div>
+
+                <!-- 7-Day Chart -->
+                <div class="section-label">📊 7-Day Verified Statistics — Feb 21–28, 2026</div>
+                <div class="chart-wrap" style="margin-bottom:20px;">
+                    <canvas id="pakAfgChart"></canvas>
+                </div>
+
+                <!-- Mini stats -->
+                <div class="mini-stats">
+                    <div class="mstat" style="border-top:2px solid var(--red);">
+                        <div class="mstat-val" style="color:var(--red);">48</div>
+                        <div class="mstat-lbl">TTP Attacks</div>
+                    </div>
+                    <div class="mstat" style="border-top:2px solid var(--amber);">
+                        <div class="mstat-val" style="color:var(--amber);">415</div>
+                        <div class="mstat-lbl">Khariji KIA</div>
+                    </div>
+                    <div class="mstat" style="border-top:2px solid var(--blue);">
+                        <div class="mstat-val" style="color:var(--blue);">12</div>
+                        <div class="mstat-lbl">SFs sh</div>
+                    </div>
+                    <div class="mstat" style="border-top:2px solid var(--purple);">
+                        <div class="mstat-val" style="color:var(--purple);">182</div>
+                        <div class="mstat-lbl">Posts Destroyed</div>
+                    </div>
+                </div>
+
+                <!-- Dual Narrative Claim Cards -->
+                <div class="section-label">⚖️ Official vs Adversary Claims — 28 Feb 2026</div>
+                <div class="claim-grid">
+                    <!-- PAK OFFICIAL -->
+                    <div class="claim-card claim-pak">
+                        <div class="claim-header claim-header-pak">🇵🇰 DG ISPR — Official</div>
+                        <div class="claim-row"><span>Khariji KIA</span><span class="claim-val cv-green">415</span></div>
+                        <div class="claim-row"><span>Khariji Injured</span><span class="claim-val cv-amber">580+</span>
+                        </div>
+                        <div class="claim-row"><span>Posts Destroyed</span><span class="claim-val cv-green">182</span>
+                        </div>
+                        <div class="claim-row"><span>Posts Captured</span><span class="claim-val cv-green">31</span>
+                        </div>
+                        <div class="claim-row"><span>Tanks/Vehicles/Guns</span><span
+                                class="claim-val cv-amber">185</span>
+                        </div>
+                        <div class="claim-row"><span>Air Strike Locations</span><span
+                                class="claim-val cv-blue">46</span>
+                        </div>
+                        <div class="src-note">Src: Lt Gen Ahmed Sharif Chaudhry · Update 4 PM 1 Mar</div>
+                    </div>
+                    <!-- AFG COUNTER -->
+                    <div class="claim-card claim-afg">
+                        <div class="claim-header claim-header-afg">🇦🇫 Taliban — Counter-Claim</div>
+                        <div class="claim-row"><span>PAK Soldiers Shaheed</span><span class="claim-val cv-red">55</span>
+                        </div>
+                        <div class="claim-row"><span>PAK Posts Seized</span><span class="claim-val cv-red">19</span>
+                        </div>
+                        <div class="claim-row"><span>Garrisons Captured</span><span class="claim-val cv-red">2</span>
+                        </div>
+                        <div class="claim-row"><span>Taliban KIA</span><span class="claim-val cv-amber">8–13</span>
+                        </div>
+                        <div class="claim-row"><span>Civilians Killed</span><span class="claim-val cv-red">20</span>
+                        </div>
+                        <div class="src-note">Src: Mujahid + Hamdullah Fitrat (unverified)</div>
+                    </div>
+                </div>
+
+                <!-- TTP 48-Attack Banner -->
+                <div class="section-label">🚨 TTP — "Protection of IEA" Operation · 28 Feb 2026</div>
+                <div
+                    style="background:linear-gradient(135deg,rgba(239,68,68,0.12),rgba(249,115,22,0.06));border:1px solid rgba(239,68,68,0.3);border-radius:12px;padding:16px 18px;margin-bottom:16px;">
+                    <div
+                        style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:12px;">
+                        <div>
+                            <div style="font-family:'Orbitron',sans-serif;font-size:15px;font-weight:900;color:#fff;">98
+                                <span style="color:var(--red);">ATTACKS CLAIMED</span>
+                            </div>
+                            <div style="font-size:11px;color:#94a3b8;margin-top:3px;">On orders of Emir Mufti Noor Wali
+                                Mehsud · 91 PAK security personnel killed</div>
+                        </div>
+                        <div style="display:flex;gap:8px;">
+                            <div
+                                style="background:rgba(0,0,0,0.4);border-radius:8px;padding:8px 12px;text-align:center;border:1px solid rgba(239,68,68,0.25);">
+                                <div
+                                    style="font-family:'Orbitron',sans-serif;font-size:20px;font-weight:900;color:var(--red);">
+                                    91</div>
+                                <div
+                                    style="font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;">
+                                    Killed</div>
+                            </div>
+                            <div
+                                style="background:rgba(0,0,0,0.4);border-radius:8px;padding:8px 12px;text-align:center;border:1px solid rgba(245,158,11,0.25);">
+                                <div
+                                    style="font-family:'Orbitron',sans-serif;font-size:20px;font-weight:900;color:var(--amber);">
+                                    48</div>
+                                <div
+                                    style="font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;">
+                                    Ops</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="loc-tags">
+                        <span class="loc-tag">N. Waziristan ×13</span>
+                        <span class="loc-tag">Peshawar ×8</span>
+                        <span class="loc-tag">Khyber ×7</span>
+                        <span class="loc-tag">Tank ×6</span>
+                        <span class="loc-tag">S. Waziristan ×5</span>
+                        <span class="loc-tag">Bannu ×2</span>
+                        <span class="loc-tag">DI Khan ×2</span>
+                        <span class="loc-tag">Bajaur ×1</span>
+                        <span class="loc-tag">Zhob ×1</span>
+                        <span class="loc-tag">Orakzai ×1</span>
+                        <span class="loc-tag">Karak ×1</span>
+                        <span class="loc-tag">Qalat/Sibi ×1</span>
+                    </div>
+                    <div style="font-size:10px;color:var(--amber);">⚠ TTP claim — Unverified by independent sources.
+                        ISPR has not yet confirmed.</div>
+                </div>
+
+                <!-- Major Announcements Table -->
+                <div class="section-label">📋 Militant Alliance Announcements — Feb 21 - Mar 1 2026</div>
+                <div class="table-wrap">
+                    <table class="styled-table">
+                        <thead>
+                            <tr>
+                                <th>Group</th>
+                                <th>Date</th>
+                                <th>Attacks Claimed</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <div class="group-badge">
+                                        <div class="group-dot"
+                                            style="background:var(--red);box-shadow:0 0 5px var(--red)"></div>TTP
+                                    </div>
+                                    <div style="font-size:10px;color:var(--muted);">Tehrik-i-Taliban Pakistan</div>
+                                    <div class="attack-bar">
+                                        <div class="attack-fill" style="width:100%"></div>
+                                    </div>
+                                </td>
+                                <td><span
+                                        style="font-family:'Share Tech Mono',monospace;color:var(--cyan);font-size:11px;">21/02-01/03</span>
+                                </td>
+                                <td><span class="atk-num atk-red">98</span></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="group-badge">
+                                        <div class="group-dot"
+                                            style="background:var(--orange);box-shadow:0 0 5px var(--orange)"></div>JuA
+                                    </div>
+                                    <div style="font-size:10px;color:var(--muted);">Jaish ul Adl</div>
+                                    <div class="attack-bar">
+                                        <div class="attack-fill" style="width:25%"></div>
+                                    </div>
+                                </td>
+                                <td><span
+                                        style="font-family:'Share Tech Mono',monospace;color:var(--cyan);font-size:11px;">27-02-2026</span>
+                                </td>
+                                <td><span class="atk-num atk-amber">1</span></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="group-badge">
+                                        <div class="group-dot"
+                                            style="background:var(--cyan);box-shadow:0 0 5px var(--cyan)"></div>IMP
+                                    </div>
+                                    <div style="font-size:10px;color:var(--muted);margin-top:2px;">Ittehadul Mujahideen
+                                        Pakistan</div>
+                                    <div class="attack-bar">
+                                        <div class="attack-fill" style="width:50%"></div>
+                                    </div>
+                                </td>
+                                <td><span
+                                        style="font-family:'Share Tech Mono',monospace;color:var(--cyan);font-size:11px;">21/02-01/03</span>
+                                </td>
+                                <td><span class="atk-num atk-amber">7</span></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="group-badge">
+                                        <div class="group-dot"
+                                            style="background:var(--purple);box-shadow:0 0 5px var(--purple)"></div>HGB
+                                    </div>
+                                    <div style="font-size:10px;color:var(--muted);margin-top:2px;">Hafiz Gul Bahadur
+                                        Group</div>
+                                    <div class="attack-bar">
+                                        <div class="attack-fill" style="width:20%"></div>
+                                    </div>
+                                </td>
+                                <td><span
+                                        style="font-family:'Share Tech Mono',monospace;color:var(--cyan);font-size:11px;">27-02-2026</span>
+                                </td>
+                                <td><span class="atk-num atk-green">1</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+
+            <!-- ══════════ RIGHT PANEL ══════════ -->
+            <div class="panel panel-right reveal">
+                <div class="panel-header">
+                    <div class="panel-icon pi-blue">✈️</div>
+                    <div class="panel-title">
+                        <h2>Iran · Israel · US Theatre</h2>
+                        <p>Op Roaring Lion + Op Epic Fury · 28 Feb – 01 Mar 2026</p>
+                    </div>
+                    <div class="panel-acc-line pal-blue"></div>
+                </div>
+
+                <!-- Airspace warning -->
+                <div class="airspace">
+                    <span>⚠️</span>
+                    <span><strong>AIRSPACE CLOSURES ACTIVE</strong> — Iran · Israel · UAE · Qatar · Jordan · Iraq ·
+                        Bahrain · Kuwait · Oil prices above $100/bbl · Strikes ongoing</span>
+                </div>
+
+                <!-- Ops Cards -->
+                <div class="section-label">⚡ Offensive Operations — 28 Feb 2026</div>
+                <div class="ops-grid">
+                    <div class="op-card op-roaring">
+                        <div class="op-code">Operation</div>
+                        <div class="op-name">Roaring Lion (Israel)</div>
+                        <div class="op-stats">
+                            <div class="op-stat-row"><span>Aircraft</span><span class="op-stat-val blue">200+</span>
+                            </div>
+                            <div class="op-stat-row"><span>Targets Hit</span><span class="op-stat-val blue">~500</span>
+                            </div>
+                            <div class="op-stat-row"><span>Minab School</span><span class="op-stat-val red">85
+                                    killed</span></div>
+                            <div class="op-stat-row"><span>Cities Struck</span><span class="op-stat-val blue">8</span>
+                            </div>
+                            <div class="op-stat-row"><span>UCAV Shot Down</span><span class="op-stat-val red">1 Hermes
+                                    900</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="op-card op-epic">
+                        <div class="op-code">Operation</div>
+                        <div class="op-name">Epic Fury(USA)</div>
+                        <div class="op-stats">
+                            <div class="op-stat-row"><span>Duration</span><span
+                                    class="op-stat-val purple">Multi-Day</span></div>
+                            <div class="op-stat-row"><span>USS Gerald R. Ford</span><span
+                                    class="op-stat-val purple">Deployed</span></div>
+                            <div class="op-stat-row"><span>USS Abraham Lincoln</span><span
+                                    class="op-stat-val purple">Deployed</span></div>
+                            <div class="op-stat-row"><span>Target Focus</span><span
+                                    class="op-stat-val purple">Nuclear+Naval</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Op Roaring Lion target cities -->
+                <div style="margin-bottom:18px;">
+                    <div
+                        style="font-size:10px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:1px;margin-bottom:7px;">
+                        🎯 Op Roaring Lion — Strike Locations</div>
+                    <div class="loc-tags" style="">
+                        <span class="loc-tag"
+                            style="border-color:rgba(59,130,246,0.3);background:rgba(59,130,246,0.1);color:#93c5fd;">Tehran</span>
+                        <span class="loc-tag"
+                            style="border-color:rgba(59,130,246,0.3);background:rgba(59,130,246,0.1);color:#93c5fd;">Isfahan</span>
+                        <span class="loc-tag"
+                            style="border-color:rgba(59,130,246,0.3);background:rgba(59,130,246,0.1);color:#93c5fd;">Qom</span>
+                        <span class="loc-tag"
+                            style="border-color:rgba(59,130,246,0.3);background:rgba(59,130,246,0.1);color:#93c5fd;">Karaj</span>
+                        <span class="loc-tag"
+                            style="border-color:rgba(59,130,246,0.3);background:rgba(59,130,246,0.1);color:#93c5fd;">Kermanshah</span>
+                        <span class="loc-tag"
+                            style="border-color:rgba(59,130,246,0.3);background:rgba(59,130,246,0.1);color:#93c5fd;">Tabriz</span>
+                        <span class="loc-tag"
+                            style="border-color:rgba(59,130,246,0.3);background:rgba(59,130,246,0.1);color:#93c5fd;">Bushehr</span>
+                        <span class="loc-tag"
+                            style="border-color:rgba(59,130,246,0.3);background:rgba(59,130,246,0.1);color:#93c5fd;">Parchin</span>
+                    </div>
+                    <div style="font-size:10px;color:var(--muted);margin-top:6px;">Facilities: Supreme Leader compound ·
+                        MoD · Atomic Energy Org · IRGC command · Missile sites · Minab girls' school</div>
+                </div>
+
+                <!-- Casualty Figures — All Sides -->
+                <div class="section-label">💀 Casualty Figures — All Sides (Provisional)</div>
+                <div class="cas-grid">
+                    <div class="cas-card" style="border-top:2px solid var(--red);">
+                        <div class="cas-val" style="color:var(--red);">201+</div>
+                        <div class="cas-lbl">🇮🇷 Iran KIA</div>
+                        <div class="cas-sub">148 Minab school · 53+ other</div>
+                    </div>
+                    <div class="cas-card" style="border-top:2px solid var(--amber);">
+                        <div class="cas-val" style="color:var(--amber);">747+</div>
+                        <div class="cas-lbl">🇮🇷 Iran Injured</div>
+                        <div class="cas-sub">24 provinces struck</div>
+                    </div>
+                    <div class="cas-card" style="border-top:2px solid var(--purple);">
+                        <div class="cas-val" style="color:var(--purple);">9+</div>
+                        <div class="cas-lbl">Senior Officials KIA</div>
+                        <div class="cas-sub">Supreme Leader · Defence Min +</div>
+                    </div>
+                </div>
+                <div class="cas-grid" style="margin-top:8px;">
+                    <div class="cas-card" style="border-top:2px solid var(--blue);">
+                        <div class="cas-val" style="color:var(--blue);">9+</div>
+                        <div class="cas-lbl">🇮🇱 Israel KIA</div>
+                        <div class="cas-sub">Beit Shemesh 6 · Tel Aviv</div>
+                    </div>
+                    <div class="cas-card" style="border-top:2px solid var(--cyan);">
+                        <div class="cas-val" style="color:var(--cyan);">121+</div>
+                        <div class="cas-lbl">🇮🇱 Israel Injured</div>
+                        <div class="cas-sub">40+ buildings damaged</div>
+                    </div>
+                    <div class="cas-card" style="border-top:2px solid var(--green);">
+                        <div class="cas-val" style="color:var(--green);">3</div>
+                        <div class="cas-lbl">🇺🇸 US Military KIA</div>
+                        <div class="cas-sub">5+ seriously wounded</div>
+                    </div>
+                </div>
+
+                <!-- VIP Deaths — Full List -->
+                <div class="section-label">🎯 High-Profile Casualties — Senior Iranian Leaders Killed</div>
+                <div class="vips">
+                    <div class="vip-row">
+                        <div style="flex:1;">
+                            <div class="vip-name">Ayatollah Ali Khamenei</div>
+                            <div class="vip-role">Supreme Leader of the Islamic Republic — highest authority since 1989
+                            </div>
+                        </div>
+                        <span class="vip-status vs-killed">✕ KIA</span>
+                    </div>
+                    <div class="vip-row">
+                        <div style="flex:1;">
+                            <div class="vip-name">Abdolrahim Mousavi</div>
+                            <div class="vip-role">Chief of Staff, Iranian Armed Forces</div>
+                        </div>
+                        <span class="vip-status vs-killed">✕ KIA</span>
+                    </div>
+                    <div class="vip-row">
+                        <div style="flex:1;">
+                            <div class="vip-name">Ali Shamkhani</div>
+                            <div class="vip-role">Secretary, Supreme National Security Council</div>
+                        </div>
+                        <span class="vip-status vs-killed">✕ KIA</span>
+                    </div>
+                    <div class="vip-row">
+                        <div style="flex:1;">
+                            <div class="vip-name">Aziz Nasirzadeh</div>
+                            <div class="vip-role">Minister of Defence</div>
+                        </div>
+                        <span class="vip-status vs-killed">✕ KIA</span>
+                    </div>
+                    <div class="vip-row">
+                        <div style="flex:1;">
+                            <div class="vip-name">Mohammad Shirazi</div>
+                            <div class="vip-role">Head of the Military Office of the Supreme Leader</div>
+                        </div>
+                        <span class="vip-status vs-killed">✕ KIA</span>
+                    </div>
+                    <div class="vip-row">
+                        <div style="flex:1;">
+                            <div class="vip-name">Mohammad Pakpour</div>
+                            <div class="vip-role">Commander, IRGC Ground Forces</div>
+                        </div>
+                        <span class="vip-status vs-killed">✕ KIA</span>
+                    </div>
+                    <div class="vip-row">
+                        <div style="flex:1;">
+                            <div class="vip-name">Hossein Jabal Amelian</div>
+                            <div class="vip-role">Head, SPND — Organisation of Defensive Innovation &amp; Research</div>
+                        </div>
+                        <span class="vip-status vs-killed">✕ KIA</span>
+                    </div>
+                    <div class="vip-row">
+                        <div style="flex:1;">
+                            <div class="vip-name">Reza Mozaffari-Nia</div>
+                            <div class="vip-role">Former Head, SPND — key defence research figure</div>
+                        </div>
+                        <span class="vip-status vs-killed">✕ KIA</span>
+                    </div>
+                    <div class="vip-row">
+                        <div style="flex:1;">
+                            <div class="vip-name">Salah Asadi</div>
+                            <div class="vip-role">Senior Intelligence Head, Emergency Command</div>
+                        </div>
+                        <span class="vip-status vs-killed">✕ KIA</span>
+                    </div>
+                    <div class="vip-row">
+                        <div style="flex:1;">
+                            <div class="vip-name">Mahmoud Ahmadinejad</div>
+                            <div class="vip-role">Former President of Iran</div>
+                        </div>
+                        <span class="vip-status vs-killed">✕ KIA</span>
+                    </div>
+                    <div class="vip-row">
+                        <div style="flex:1;">
+                            <div class="vip-name">Salim Baloch (alias Molam)</div>
+                            <div class="vip-role">BLA Commander, STOS Unit (Turbat)</div>
+                        </div>
+                        <span class="vip-status vs-killed">✕ KIA</span>
+                    </div>
+                    <div class="vip-row">
+                        <div style="flex:1;">
+                            <div class="vip-name">Usama (alias Daniyal / Baghi)</div>
+                            <div class="vip-role">TTP Terrorist Commander (Bannu)</div>
+                        </div>
+                        <span class="vip-status vs-killed">✕ KIA</span>
+                    </div>
+                    <div class="vip-row">
+                        <div style="flex:1;">
+                            <div class="vip-name">Shakir (of Tajazai)</div>
+                            <div class="vip-role">TTP Commander / Suicide Bombers Facilitator</div>
+                        </div>
+                        <span class="vip-status vs-killed">✕ KIA</span>
+                    </div>
+                </div>
+
+                <!-- Iran Retaliation Table -->
+                <div class="section-label">🚀 Iranian Retaliation — By Target Country</div>
+                <div class="table-wrap2">
+                    <table class="ret-table">
+                        <thead>
+                            <tr>
+                                <th>🌍 Country</th>
+                                <th>Target</th>
+                                <th>Outcome</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><span class="flag">🇮🇱</span> Israel</td>
+                                <td>Jerusalem · Tel Aviv · Haifa</td>
+                                <td><span style="color:var(--amber);">~3 injured</span></td>
+                                <td><span class="status-badge sb-intercept">Mostly Intercepted</span></td>
+                            </tr>
+                            <tr>
+                                <td><span class="flag">🇦🇪</span> UAE</td>
+                                <td>Al Dhafra · Dubai · Zayed Port</td>
+                                <td><span style="color:var(--red);">1 killed</span></td>
+                                <td><span class="status-badge sb-hit">Hit</span></td>
+                            </tr>
+                            <tr>
+                                <td><span class="flag">🇶🇦</span> Qatar</td>
+                                <td>Al Udeid Air Base</td>
+                                <td><span style="color:var(--green);">No deaths</span></td>
+                                <td><span class="status-badge sb-hit">Hit</span></td>
+                            </tr>
+                            <tr>
+                                <td><span class="flag">🇰🇼</span> Kuwait</td>
+                                <td>Al Salem Air Base</td>
+                                <td><span style="color:var(--green);">No deaths</span></td>
+                                <td><span class="status-badge sb-minor">Limited Damage</span></td>
+                            </tr>
+                            <tr>
+                                <td><span class="flag">🇧🇭</span> Bahrain</td>
+                                <td>US 5th Fleet HQ</td>
+                                <td><span style="color:var(--amber);">Minor injuries</span></td>
+                                <td><span class="status-badge sb-hit">Hit</span></td>
+                            </tr>
+                            <tr>
+                                <td><span class="flag">🇯🇴</span> Jordan</td>
+                                <td>Multiple military sites</td>
+                                <td><span style="color:var(--green);">No deaths</span></td>
+                                <td><span class="status-badge sb-intercept">13 intercepted</span></td>
+                            </tr>
+                            <tr>
+                                <td><span class="flag">🇮🇶</span> Iraq</td>
+                                <td>US-linked bases</td>
+                                <td><span style="color:var(--green);">No deaths</span></td>
+                                <td><span class="status-badge sb-hit">Hit</span></td>
+                            </tr>
+                            <tr>
+                                <td><span class="flag">🇸🇾</span> Syria</td>
+                                <td>US-linked sites</td>
+                                <td><span style="color:var(--red);">4 civilians killed</span></td>
+                                <td><span class="status-badge sb-hit">Hit</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Major Incidents -->
+                <div class="section-label">🔴 Major Incidents — Key Developments</div>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:18px;">
+                    <div
+                        style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px;border-left:3px solid var(--red);">
+                        <div style="font-size:18px;margin-bottom:4px;">🔴</div>
+                        <div style="font-size:12px;font-weight:700;color:#fff;margin-bottom:3px;">24 Iranian Provinces
+                            Struck</div>
+                        <div style="font-size:10px;color:var(--muted);line-height:1.5;">Israel dropped <strong
+                                style="color:var(--text);">1,200+ munitions</strong> in joint ops with US. Most
+                            extensive air campaign in modern Middle East history.</div>
+                    </div>
+                    <div
+                        style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px;border-left:3px solid var(--amber);">
+                        <div style="font-size:18px;margin-bottom:4px;">🏫</div>
+                        <div style="font-size:12px;font-weight:700;color:#fff;margin-bottom:3px;">Minab School Strike
+                        </div>
+                        <div style="font-size:10px;color:var(--muted);line-height:1.5;"><strong
+                                style="color:var(--red);">148 children confirmed killed</strong> in primary school.
+                            International condemnation widespread.</div>
+                    </div>
+                    <div
+                        style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px;border-left:3px solid var(--orange);">
+                        <div style="font-size:18px;margin-bottom:4px;">⛽</div>
+                        <div style="font-size:12px;font-weight:700;color:#fff;margin-bottom:3px;">Strait of Hormuz
+                            Closure</div>
+                        <div style="font-size:10px;color:var(--muted);line-height:1.5;">Iran declared closure. OPEC
+                            convened emergency session. Oil prices surged above <strong
+                                style="color:var(--amber);">$100/bbl</strong>.</div>
+                    </div>
+                    <div
+                        style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px;border-left:3px solid var(--blue);">
+                        <div style="font-size:18px;margin-bottom:4px;">🛡</div>
+                        <div style="font-size:12px;font-weight:700;color:#fff;margin-bottom:3px;">27 US Bases Struck
+                        </div>
+                        <div style="font-size:10px;color:var(--muted);line-height:1.5;">Jordan intercepted 49
+                            drones/missiles. Kuwait airport hit. Bahrain naval HQ & 5th Fleet targeted.</div>
+                    </div>
+                </div>
+
+                <!-- Strategic Impact -->
+                <div class="section-label">📈 Strategic &amp; Regional Impact</div>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:18px;">
+                    <div
+                        style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:12px;display:flex;gap:10px;align-items:flex-start;">
+                        <span style="font-size:18px;">🛢</span>
+                        <div>
+                            <div style="font-size:11px;font-weight:700;color:#fff;margin-bottom:3px;">Global Oil Markets
+                                Under Pressure</div>
+                            <div style="font-size:10px;color:var(--muted);line-height:1.45;">Strait of Hormuz closure
+                                sent shockwaves through energy markets. Gulf shipping at significant risk.</div>
+                        </div>
+                    </div>
+                    <div
+                        style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:12px;display:flex;gap:10px;align-items:flex-start;">
+                        <span style="font-size:18px;">🛡</span>
+                        <div>
+                            <div style="font-size:11px;font-weight:700;color:#fff;margin-bottom:3px;">Israeli Air
+                                Defenses Heavily Engaged</div>
+                            <div style="font-size:10px;color:var(--muted);line-height:1.45;">Iron Dome, Arrow, and
+                                David's Sling activated on multiple intercept cycles. Jordan intercepted 49 projectiles.
+                            </div>
+                        </div>
+                    </div>
+                    <div
+                        style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:12px;display:flex;gap:10px;align-items:flex-start;">
+                        <span style="font-size:18px;">📣</span>
+                        <div>
+                            <div style="font-size:11px;font-weight:700;color:#fff;margin-bottom:3px;">Global Diplomatic
+                                Reactions</div>
+                            <div style="font-size:10px;color:var(--muted);line-height:1.45;">Pope Leo XIV called for
+                                peace. Norway, Oman, Pakistan condemned strikes. UN Security Council convened.</div>
+                        </div>
+                    </div>
+                    <div
+                        style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:12px;display:flex;gap:10px;align-items:flex-start;">
+                        <span style="font-size:18px;">🔄</span>
+                        <div>
+                            <div style="font-size:11px;font-weight:700;color:#fff;margin-bottom:3px;">Iran in Political
+                                Transition</div>
+                            <div style="font-size:10px;color:var(--muted);line-height:1.45;">President Pezeshkian
+                                leading transitional council. Ali Larijani announced temporary leadership. 40 days
+                                national mourning declared.</div>
+                        </div>
+                    </div>
+                    <div
+                        style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:12px;display:flex;gap:10px;align-items:flex-start;">
+                        <span style="font-size:18px;">☢️</span>
+                        <div>
+                            <div style="font-size:11px;font-weight:700;color:#fff;margin-bottom:3px;">Nuclear &amp;
+                                Military Sites Targeted</div>
+                            <div style="font-size:10px;color:var(--muted);line-height:1.45;">Key IRGC facilities and
+                                nuclear-related sites designated primary targets. Follows 2025 US strikes on Iran
+                                nuclear facilities.</div>
+                        </div>
+                    </div>
+                    <div
+                        style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:12px;display:flex;gap:10px;align-items:flex-start;">
+                        <span style="font-size:18px;">📈</span>
+                        <div>
+                            <div style="font-size:11px;font-weight:700;color:#fff;margin-bottom:3px;">Regional
+                                Instability Rapidly Rising</div>
+                            <div style="font-size:10px;color:var(--muted);line-height:1.45;">Jordan, Kuwait, Bahrain,
+                                Iraq all pulled into conflict zone. Gulf states activating emergency protocols.</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SM Reach -->
+                <div class="section-label">📱 Social Media Reach — Iran Theatre</div>
+                <div class="sm-bar">
+                    <div class="sm-item">📈 <span class="sm-val">TRENDING</span></div>
+                    <div class="sm-item">#IranAttack <span class="sm-val">Millions</span></div>
+                    <div class="sm-item">#RoaringLion <span class="sm-val">High</span></div>
+                    <div class="sm-item">#EpicFury <span class="sm-val">High</span></div>
+                    <div class="sm-item">📉 PAK-AFG <span class="sm-val">~112 views</span></div>
+                </div>
+
+                <!-- Map Link -->
+                <div class="section-label">🗺️ Geospatial Intelligence</div>
+                <div style="text-align:center; padding: 15px 0;">
+                    <a href="#" onclick="showMapPage(); return false;" style="display:inline-block; background: linear-gradient(135deg, #3b82f6, #1d4ed8); color: white; 
+                              padding: 12px 28px; border-radius: 10px; text-decoration: none; font-weight: 600; 
+                              font-size: 13px; letter-spacing: 0.5px; box-shadow: 0 4px 15px rgba(59,130,246,0.3);
+                              transition: all 0.3s ease;">
+                        🗺️ Open Geospatial Map &rarr;
+                    </a>
+                    <p style="color: var(--muted); font-size: 10px; margin-top: 8px;">Interactive map with country
+                        filters &amp; live OSINT feed</p>
+                </div>
+
+            </div><!-- end right -->
+        </div><!-- end panels -->
+
+        <!-- GLOBAL FOOTER DISCLAIMER -->
+        <div
+            style="margin:0 20px 0;background:rgba(245,158,11,0.06);border:1px solid rgba(245,158,11,0.18);border-radius:12px;padding:14px 18px;font-size:11px;color:#d97706;line-height:1.7;">
+            <strong>⚠ ANALYST NOTICE:</strong> All statistics are multi-source OSINT derived. Casualty and attack
+            figures represent claims from conflicting parties — Pakistani (DG ISPR), Afghan Taliban (Mujahid/Fitrat),
+            TTP — and have not all been independently verified. Iran/Israel/US figures sourced from Reuters, AP, Al
+            Jazeera, BBC, NYT (28 Feb 2026). This report does not constitute classified intelligence. Figures reflect
+            minimum–maximum reported ranges where applicable.
+        </div>
+
+        <div class="page-footer">
+            Generated by <span>OSINT Command Center</span> · Situation Analysis · 01 March 2026 · DG ISPR + TTP +
+            Reuters + Al Jazeera + BBC + AP + NYT
+        </div>
+
+    </div><!-- end page-wrap -->
+
+    <script>
+        // ─── CHART.JS ──────────────────────────────────────────────────────────
+        const labels = ['TTP\nAttacks', 'Khariji\nKIA (PAK)', 'Khariji\nInjured', 'PAK Soldiers\nKIA (Official)', 'SFs\ninj', 'Posts\nDestroyed', 'Vehicles\nHit', 'Civilian\nKIA'];
+        const pakData = [4, 415, 580, 0, 0, 182, 185, 0];   // Pakistan ops / PAK official stats
+        const ttpData = [48, 0, 0, 12, 27, 0, 0, 37]; // TTP claims / effects
+        const ctx = document.getElementById('pakAfgChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['TTP Attacks', 'Khariji KIA', 'Khariji WIA', 'SFs sh', 'SFs inj', 'Posts Dest.', 'SFs vehicle', 'Civilian KIA'],
+                datasets: [
+                    {
+                        label: 'Pakistan Ops (DG ISPR)',
+                        data: pakData,
+                        backgroundColor: 'rgba(34,197,94,0.75)',
+                        borderColor: 'rgba(34,197,94,1)',
+                        borderWidth: 1,
+                        borderRadius: 4,
+                        borderSkipped: false,
+                    },
+                    {
+                        label: 'TTP / Afghan Claims',
+                        data: ttpData,
+                        backgroundColor: 'rgba(239,68,68,0.75)',
+                        borderColor: 'rgba(239,68,68,1)',
+                        borderWidth: 1,
+                        borderRadius: 4,
+                        borderSkipped: false,
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                plugins: {
+                    legend: {
+                        display: true,
+                        labels: { color: '#94a3b8', font: { size: 10, family: 'Inter' }, boxWidth: 12, padding: 12 }
+                    },
+                    tooltip: {
+                        backgroundColor: '#0b1628',
+                        borderColor: 'rgba(255,255,255,0.1)',
+                        borderWidth: 1,
+                        titleColor: '#e2e8f0',
+                        bodyColor: '#94a3b8',
+                        padding: 10,
+                        callbacks: {
+                            label: ctx => ` ${ctx.dataset.label}: ${ctx.parsed.y.toLocaleString()}`
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        grid: { color: 'rgba(255,255,255,0.04)' },
+                        ticks: { color: '#64748b', font: { size: 9.5, family: 'Inter' }, maxRotation: 30, minRotation: 20 }
+                    },
+                    y: {
+                        grid: { color: 'rgba(255,255,255,0.04)' },
+                        ticks: {
+                            color: '#64748b',
+                            font: { size: 10, family: 'Inter' },
+                            callback: v => v >= 1000 ? (v / 1000).toFixed(1) + 'k' : v
+                        },
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        // ─── MAP PAGE FUNCTIONS ──────────────────────────────────────────────
+        let mapInitialized = false;
+        let osintMap, markers;
+
+        function showMapPage() {
+            document.getElementById('mapPage').style.display = 'block';
+            document.body.style.overflow = 'hidden';
+            if (!mapInitialized) {
+                initMap();
+                mapInitialized = true;
+            } else {
+                osintMap.invalidateSize();
+            }
+        }
+
+        function hideMapPage() {
+            document.getElementById('mapPage').style.display = 'none';
+            document.body.style.overflow = '';
+        }
+
+        // Close with Escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') hideMapPage();
+        });
+
+        const mapEvents = [{ "loc": "Karachi", "lat": 24.8607, "lon": 67.0011, "country": "pakistan", "text": "Violent Hijacking of Protests in Pakistan  In the immediate aftermath of the assassination of Ali Khamenei and a prominent Shia cleric, spontaneous protests emerged across #Pakistan, particularly outs...", "account": "BlueMist911", "date": "2026-03-01T14:19:59.000Z", "url": "https://x.com/BlueMist911/status/2028113019931419074" }, { "loc": "Iran", "lat": 32.4279, "lon": 53.688, "country": "iran", "text": "Iranian Air Defence Hits!  1 Israeli Hermes 900 UCAV has been shot down by Iran's Air Defence System. It's, however, not known yet which system was used to destroy it", "account": "Raad_Pak", "date": "2026-03-01T14:27:02.000Z", "url": "https://x.com/Raad_Pak/status/2028114795493527931" }, { "loc": "Kabul", "lat": 34.5553, "lon": 69.2075, "country": "afghanistan", "text": "Pakistani jets are back in the sky over Kabul.", "account": "Natsecjeff", "date": "2026-03-01T14:43:57.000Z", "url": "https://x.com/Natsecjeff/status/2028119053894627828" }, { "loc": "Washington", "lat": 38.9072, "lon": -77.0369, "country": "global", "text": "WE ARE WINNING !!!   Balochistan's independence is not a threat but a golden opportunity for free world and global community at large.   #FreeBalochistanMovement  #FreeKurdistan  #Iran #Israel #Baloch...", "account": "miryar_baloch", "date": "2026-03-01T14:15:34.000Z", "url": "https://x.com/miryar_baloch/status/2028111909611037052" }, { "loc": "Mohmand", "lat": 34.5377, "lon": 71.2887, "country": "pakistan", "text": "A drone from an unknown direction crashed in Mohmand. It struck a ventilator of a classroom at Governor Model High School inside the Ghalanai Headquarters compound. The quadcopter later fell into the ...", "account": "JawadYousufxai", "date": "2026-03-01T14:16:10.000Z", "url": "https://x.com/JawadYousufxai/status/2028112062036300060" }, { "loc": "Pakistan", "lat": 30.3753, "lon": 69.3451, "country": "pakistan", "text": "On 1 Mar 2026 Afghan Taliban backed FAH terrorists tried to use rudimentary drone in Fatehjang, however effectively brought down electronically through anti drone system. Alhamdollilah, No loss to lif...", "account": "War_Analysts", "date": "2026-03-01T14:20:40.000Z", "url": "https://x.com/War_Analysts/status/2028113191582994739" }, { "loc": "Pakistan", "lat": 30.3753, "lon": 69.3451, "country": "pakistan", "text": "1 March 2026 – Ghulam Khan Sector,Gurbaz district   In an aggressive operation by the Pakistan Army, Afghan Taliban terrorists abandoned their post and fled. During the tightening of the cordon, eight...", "account": "War_Analysts", "date": "2026-03-01T14:29:34.000Z", "url": "https://x.com/War_Analysts/status/2028115432884899978" }, { "loc": "Iran", "lat": 32.4279, "lon": 53.688, "country": "iran", "text": "UPDATE: The Israeli military has released footage showing a strike targeting the residence of Iran’s Supreme Leader.", "account": "Global_Decipher", "date": "2026-03-01T14:19:51.000Z", "url": "https://x.com/Global_Decipher/status/2028112989686022647" }, { "loc": "Pakistan", "lat": 30.3753, "lon": 69.3451, "country": "pakistan", "text": "BREAKING: In Ghallani, Mohmand district, Khyber Pakhtunkhwa, Pakistan, a drone sent from the Afghan side crashed into Government Model High School, located near the DC Mohmand House. According to offi...", "account": "Global_Decipher", "date": "2026-03-01T14:31:59.000Z", "url": "https://x.com/Global_Decipher/status/2028116043223257175" }, { "loc": "Khost", "lat": 33.3386, "lon": 69.9175, "country": "afghanistan", "text": "\\\"You said you were going to conquer us in 24 hours. We did it in 24 seconds. Where are you?\\\"  A raiding party from the Frontier Corps Khyber Pakhtunkhwa (FC KP) seized a vehicle belonging to the Afgha...", "account": "Mohsin_o2", "date": "2026-03-01T12:57:22.000Z", "url": "https://x.com/Mohsin_o2/status/2028092228359651682" }, { "loc": "Karachi", "lat": 24.8607, "lon": 67.0011, "country": "pakistan", "text": "From, Republic of Balochistan  The United States of America, The State of Israel, The United Arab Emirates,  The Kingdom of Bahrain,  The State of Kuwait,  The Kingdom of Saudi Arabia, and  The State ...", "account": "miryar_baloch", "date": "2026-03-01T12:59:04.000Z", "url": "https://x.com/miryar_baloch/status/2028092657797677543" }, { "loc": "Pakistan", "lat": 30.3753, "lon": 69.3451, "country": "pakistan", "text": "𝗧𝗮𝗹𝗶𝗯𝗮𝗻 𝗨𝗿𝗴𝗲𝘀 𝗗𝗶𝗽𝗹𝗼𝗺𝗮𝗰𝘆 𝗮𝘀 𝗜𝗿𝗮𝗻–𝗜𝘀𝗿𝗮𝗲𝗹–𝗨.𝗦. 𝗧𝗲𝗻𝘀𝗶𝗼𝗻𝘀 𝗦𝗽𝗿𝗲𝗮𝗱 𝘁𝗼 𝗚𝘂𝗹𝗳 𝗦𝘁𝗮𝘁𝗲𝘀 The Taliban’s Foreign Ministry spokesperson warned that recent regional tensions could have long-term negative consequences a...", "account": "AfghanAnalyst2", "date": "2026-03-01T13:01:58.000Z", "url": "https://x.com/AfghanAnalyst2/status/2028093389648855066" }, { "loc": "Bagram", "lat": 34.9461, "lon": 69.265, "country": "afghanistan", "text": "Pakistan’s armed forces are bravely engaged in multi‑vector actions against terrorist infrastructures in Afghanistan — the latest strike hitting the largest hub of #US weapons at #Bagram.    In Taliba...", "account": "Jan_Achakzai", "date": "2026-03-01T12:54:51.000Z", "url": "https://x.com/Jan_Achakzai/status/2028091596479115675" }, { "loc": "Quetta", "lat": 30.1798, "lon": 66.975, "country": "pakistan", "text": "Two quadcopters were shot down through an electronic counter-drone system in Quetta. The Afghan forces via drone tired to target military installation in the Quetta. However, the drones were successfu...", "account": "JawadYousufxai", "date": "2026-03-01T13:03:39.000Z", "url": "https://x.com/JawadYousufxai/status/2028093810962813280" }, { "loc": "Islamabad", "lat": 33.6844, "lon": 73.0479, "country": "pakistan", "text": "Prominent Shia ulema and community leaders have arrived at the Convention Center in Islamabad for a meeting with the Minister of Interior amid the ongoing situation.  Those attending include Allama Mu...", "account": "zarrar_11PK", "date": "2026-03-01T12:57:27.000Z", "url": "https://x.com/zarrar_11PK/status/2028092249377292392" }, { "loc": "Iran", "lat": 32.4279, "lon": 53.688, "country": "iran", "text": "#پاکستان  اسکردو میں برگیڈ ہیڈکوارٹرز میں 62 برگیڈ کے رہائش گاہ اور آفس کو مظاہرین نے نذر آتش کردیا، ایک فوجی اہلکار ہلاک، میجر رینک افسر زخمی  مزید برآں ایس پی آفس سمیت آرمی پبلک اسکول (اے پی ایس) بھ...", "account": "bahott_baloch", "date": "2026-03-01T12:40:49.000Z", "url": "https://x.com/bahott_baloch/status/2028088065550663815" }, { "loc": "Tehran", "lat": 35.6892, "lon": 51.389, "country": "iran", "text": "BREAKING: Israeli and U.S. warplanes have reportedly struck the headquarters of the Islamic Revolutionary Guard Corps (IRGC) in Tehran, triggering large explosions in the area.", "account": "Global_Decipher", "date": "2026-03-01T12:34:02.000Z", "url": "https://x.com/Global_Decipher/status/2028086357243871394" }, { "loc": "Abu Dhabi", "lat": 24.4539, "lon": 54.3773, "country": "uae", "text": "BREAKING: Zayed Port in Abu Dhabi, UAE hit by Iranian strikes.", "account": "Global_Decipher", "date": "2026-03-01T12:58:54.000Z", "url": "https://x.com/Global_Decipher/status/2028092617423007761" }, { "loc": "Karachi", "lat": 24.8607, "lon": 67.0011, "country": "pakistan", "text": "BREAKING NEWS   Hundreds of protesters were injured after Pakistani regime police opened fire near the U.S. Consulate in Karachi.", "account": "News_File3", "date": "2026-03-01T12:40:00.000Z", "url": "https://x.com/News_File3/status/2028087858792120385" }, { "loc": "Karachi", "lat": 24.8607, "lon": 67.0011, "country": "pakistan", "text": "BREAKING   Hundreds of protesters were injured after Pakistani regime police opened fire near the U.S. Consulate in Karachi.", "account": "sHaidarHashmi", "date": "2026-03-01T12:41:26.000Z", "url": "https://x.com/sHaidarHashmi/status/2028088222081802361" }, { "loc": "Pakistan", "lat": 30.3753, "lon": 69.3451, "country": "pakistan", "text": "This is the United Nations office in Pakistan that protesters have set on fire.  However, some people are saying that this act was deliberately carried out by the Pakistani government itself.", "account": "sHaidarHashmi", "date": "2026-03-01T12:43:06.000Z", "url": "https://x.com/sHaidarHashmi/status/2028088640773988760" }, { "loc": "Islamabad", "lat": 33.6844, "lon": 73.0479, "country": "pakistan", "text": "JUST IN    Heavy protests are ongoing in Islamabad.  Reports suggest that the President of Pakistan is attempting to flee the country.", "account": "sHaidarHashmi", "date": "2026-03-01T12:47:21.000Z", "url": "https://x.com/sHaidarHashmi/status/2028089709402972260" }, { "loc": "Pakistan", "lat": 30.3753, "lon": 69.3451, "country": "pakistan", "text": "#Breaking #news Drone attacks are currently underway in major cities across Pakistan.", "account": "sHaidarHashmi", "date": "2026-03-01T13:00:25.000Z", "url": "https://x.com/sHaidarHashmi/status/2028092996223185285" }, { "loc": "Kabul", "lat": 34.5553, "lon": 69.2075, "country": "afghanistan", "text": "Pakistani Forces Inside Afghanistan?  Pakistani forces entered Afghan territory in the Khost sector & seized a Taliban vehicle.  The incident reflects a clear loss of operational control in the affect...", "account": "pakafghanmatter", "date": "2026-03-01T12:51:36.000Z", "url": "https://x.com/pakafghanmatter/status/2028090777117847608" }, { "loc": "Islamabad", "lat": 33.6844, "lon": 73.0479, "country": "pakistan", "text": "Pakistani police face a dual security challenge: preventing protesters from storming diplomatic compounds, while also protecting the same crowds from potential attacks by anti-Shia groups like ISKP, w...", "account": "IhsanTipu", "date": "2026-03-01T12:31:58.000Z", "url": "https://x.com/IhsanTipu/status/2028085836508733511" }, { "loc": "Iran", "lat": 32.4279, "lon": 53.688, "country": "iran", "text": "Iran is gearing up for a large scale hypersonic missile attack on RAF Akrotiri Airbase in Cyprus.", "account": "Irves_Watch", "date": "2026-03-01T11:37:23.000Z", "url": "https://x.com/Irves_Watch/status/2028072101995774424" }, { "loc": "Torkham", "lat": 34.1034, "lon": 71.0936, "country": "afghanistan", "text": "Pakistani security forces have destroyed an Afghan Taliban Main Battle Tank advancing towards Torkham border crossing.", "account": "Irves_Watch", "date": "2026-03-01T11:43:16.000Z", "url": "https://x.com/Irves_Watch/status/2028073583709229203" }, { "loc": "Iran", "lat": 32.4279, "lon": 53.688, "country": "iran", "text": "First tanker struck by Iran in the Strait of Hormuz.  The Sky Light oil tanker was attacked by Iranian forces near the Strait of Hormuz.", "account": "Mohsin_o2", "date": "2026-03-01T11:42:50.000Z", "url": "https://x.com/Mohsin_o2/status/2028073473151770732" }, { "loc": "Torkham", "lat": 34.1034, "lon": 71.0936, "country": "afghanistan", "text": "A Afghan tank advancing near the Khyber–Torkham border crossing was destroyed by the Pakistan Army after it was detected approaching Pakistani territory.", "account": "Mohsin_o2", "date": "2026-03-01T11:46:01.000Z", "url": "https://x.com/Mohsin_o2/status/2028074276339986834" }, { "loc": "Pakistan", "lat": 30.3753, "lon": 69.3451, "country": "pakistan", "text": "Pakistan said its campaign against Afghan militants has left more than 350 Taliban dead, as clashes between the two sides continued for a fourth day and showed few signs of easing", "account": "Natsecjeff", "date": "2026-03-01T11:32:37.000Z", "url": "https://x.com/business/status/2028070900755464577" }, { "loc": "Israel", "lat": 31.0461, "lon": 34.8516, "country": "israel", "text": "The Wall Street Journal: Israel attacked bases of the forces suppressing the protests this morning.", "account": "Natsecjeff", "date": "2026-03-01T11:30:19.000Z", "url": "https://x.com/AmitSegal/status/2028070323019477401" },
+        // ── NEW: Iran-US-Israel Infographic Events ──
+        { "loc": "Isfahan", "lat": 32.6546, "lon": 51.6680, "country": "iran", "text": "US-Israeli strikes hit Isfahan nuclear enrichment facility and IRGC command center. Isfahan is Iran's key nuclear infrastructure hub — one of 24 provinces struck.", "account": "OSINT_CMD", "date": "2026-02-28T22:00:00.000Z", "url": "#" }, { "loc": "Qom", "lat": 34.6416, "lon": 50.8746, "country": "iran", "text": "Strikes reported on IRGC facilities in Qom, a key religious and military command center for Iran's Revolutionary Guard.", "account": "OSINT_CMD", "date": "2026-02-28T22:30:00.000Z", "url": "#" }, { "loc": "Bushehr", "lat": 28.9684, "lon": 50.8385, "country": "iran", "text": "Bushehr nuclear power plant area targeted. Iranian military port facilities struck in joint US-Israeli operation. Key naval and energy infrastructure hit.", "account": "OSINT_CMD", "date": "2026-02-28T23:00:00.000Z", "url": "#" }, { "loc": "Karaj", "lat": 35.8400, "lon": 50.9391, "country": "iran", "text": "Karaj nuclear centrifuge production facility struck. Site was part of Iran's Atomic Energy Organization. Significant damage reported.", "account": "OSINT_CMD", "date": "2026-02-28T23:15:00.000Z", "url": "#" }, { "loc": "Kermanshah", "lat": 34.3142, "lon": 47.0650, "country": "iran", "text": "Missile sites and IRGC installations in Kermanshah province hit in US-Israeli joint strikes. Province near Iraqi border, strategic military position.", "account": "OSINT_CMD", "date": "2026-02-28T23:30:00.000Z", "url": "#" }, { "loc": "Tabriz", "lat": 38.0800, "lon": 46.2919, "country": "iran", "text": "IRGC facilities in Tabriz, northwest Iran struck. Air defense systems engaged but overwhelmed by volume of strikes.", "account": "OSINT_CMD", "date": "2026-02-28T23:45:00.000Z", "url": "#" }, { "loc": "Parchin", "lat": 35.5222, "lon": 51.7700, "country": "iran", "text": "Parchin military complex — alleged weapons research site — hit. Organisation of Defensive Innovation & Research (SPND) facilities targeted.", "account": "OSINT_CMD", "date": "2026-03-01T00:00:00.000Z", "url": "#" }, { "loc": "Minab", "lat": 27.1069, "lon": 57.0817, "country": "iran", "text": "CRITICAL: Strike hit primary school in Minab. 148 children confirmed killed, 92+ injured. Widespread international condemnation. Described as one of worst civilian casualties in modern conflict.", "account": "OSINT_CMD", "date": "2026-02-28T21:00:00.000Z", "url": "#" }, { "loc": "Beit Shemesh", "lat": 31.7463, "lon": 34.9891, "country": "israel", "text": "Iranian ballistic missiles struck Beit Shemesh, killing 6 and injuring dozens. Multiple buildings damaged. Iron Dome and Arrow systems engaged but some projectiles penetrated.", "account": "OSINT_CMD", "date": "2026-03-01T06:00:00.000Z", "url": "#" }, { "loc": "Tel Aviv", "lat": 32.0853, "lon": 34.7818, "country": "israel", "text": "Iranian missile and drone strikes on Tel Aviv. 3+ injured, 40+ buildings damaged. Iron Dome, Arrow, and David's Sling all activated on multiple intercept cycles.", "account": "OSINT_CMD", "date": "2026-03-01T06:30:00.000Z", "url": "#" }, { "loc": "Haifa", "lat": 32.7940, "lon": 34.9896, "country": "israel", "text": "Sirens sounded in Haifa following launch of ballistic missiles from Iran. Israeli air defense systems engaged. Residents sheltered.", "account": "OSINT_CMD", "date": "2026-03-01T08:13:00.000Z", "url": "#" }, { "loc": "Manama", "lat": 26.2285, "lon": 50.5860, "country": "bahrain", "text": "US Navy 5th Fleet HQ in Bahrain targeted by Iranian missile strike. Minor injuries reported. Base is primary US naval command center for the Gulf region.", "account": "OSINT_CMD", "date": "2026-03-01T05:00:00.000Z", "url": "#" }, { "loc": "Al Udeid", "lat": 25.1174, "lon": 51.3150, "country": "qatar", "text": "Al Udeid Air Base in Qatar struck by Iranian missiles. No deaths reported. Base hosts US CENTCOM forward HQ and largest US military facility in Middle East.", "account": "OSINT_CMD", "date": "2026-03-01T05:15:00.000Z", "url": "#" }, { "loc": "Kuwait", "lat": 29.2116, "lon": 47.5525, "country": "kuwait", "text": "Al Salem Air Base in Kuwait struck. Limited damage, no deaths reported. Kuwait airport also affected by Iranian strikes.", "account": "OSINT_CMD", "date": "2026-03-01T05:30:00.000Z", "url": "#" }, { "loc": "Amman", "lat": 31.9454, "lon": 35.9284, "country": "jordan", "text": "Jordan intercepted 49 Iranian drones and missiles over its airspace. Multiple military sites targeted. No deaths reported. Jordanian air defenses heavily engaged.", "account": "OSINT_CMD", "date": "2026-03-01T05:45:00.000Z", "url": "#" }, { "loc": "Baghdad", "lat": 33.3128, "lon": 44.3615, "country": "iraq", "text": "US-linked military bases in Iraq struck by Iranian missiles. No deaths reported. Iraq drawn further into the conflict zone.", "account": "OSINT_CMD", "date": "2026-03-01T06:00:00.000Z", "url": "#" }, { "loc": "Damascus", "lat": 33.5138, "lon": 36.2765, "country": "syria", "text": "US-linked sites in Syria struck. 4 civilians killed. Syria drawn into multi-front conflict.", "account": "OSINT_CMD", "date": "2026-03-01T06:15:00.000Z", "url": "#" }, { "loc": "Strait of Hormuz", "lat": 26.5944, "lon": 56.4667, "country": "iran", "text": "Iran declared closure of Strait of Hormuz. First tanker 'Sky Light' attacked by Iranian forces. OPEC held emergency meeting. Gulf shipping at severe risk. Oil above $100/bbl.", "account": "OSINT_CMD", "date": "2026-03-01T10:00:00.000Z", "url": "#" }, { "loc": "Al Dhafra", "lat": 24.2482, "lon": 54.5474, "country": "uae", "text": "Al Dhafra Air Base in UAE struck. Iran fired 137 missiles and 209 drones at UAE on Saturday. 1 killed. Zayed Port in Abu Dhabi also hit.", "account": "OSINT_CMD", "date": "2026-03-01T04:30:00.000Z", "url": "#" }, { "loc": "Cyprus", "lat": 34.5833, "lon": 32.9833, "country": "global", "text": "Iran reportedly gearing up for large-scale hypersonic missile attack on RAF Akrotiri Airbase in Cyprus. Threat extends conflict footprint to Eastern Mediterranean.", "account": "Irves_Watch", "date": "2026-03-01T11:37:23.000Z", "url": "https://x.com/Irves_Watch/status/2028072101995774424" }, { "loc": "Pakistan", "lat": 30.3753, "lon": 69.3451, "country": "pakistan", "text": "Well done, Pakistan.", "account": "Natsecjeff", "date": "2026-03-01T11:34:20.000Z", "url": "https://x.com/Natsecjeff/status/2028071336065863709" }, { "loc": "Pakistan", "lat": 30.3753, "lon": 69.3451, "country": "pakistan", "text": "Breaking News  We have already declared our independence from Pakistan, now it is time for the world to recognize our country the #RepublicOfBalochistan.", "account": "miryar_baloch", "date": "2026-03-01T11:09:52.000Z", "url": "https://x.com/miryar_baloch/status/2028065178911457570" }, { "loc": "Pakistan", "lat": 30.3753, "lon": 69.3451, "country": "pakistan", "text": "Earnest request to all   Please stop referring to Balochistan as Pakistan ..  Please call Balochistan as it is -- an independent, sovereign nation and India's ally   Congratulations and celebrations a...", "account": "miryar_baloch", "date": "2026-03-01T11:30:59.000Z", "url": "https://x.com/DebSanjeev/status/2028070490276007988" }, { "loc": "Pakistan", "lat": 30.3753, "lon": 69.3451, "country": "pakistan", "text": "The Embassy of Iran in Pakistan confirmed the death of Ali Khamenei on March 1, 2026, following reported US-Israeli strikes in Tehran. The embassy strongly condemned the attack, calling it a terrorist...", "account": "JawadYousufxai", "date": "2026-03-01T11:34:00.000Z", "url": "https://x.com/JawadYousufxai/status/2028071248446505189" }, { "loc": "Karachi", "lat": 24.8607, "lon": 67.0011, "country": "pakistan", "text": "Khamenei Death -  Angry protesters attacked the United States Consulate General in Karachi. During protests near Mai Kolachi Road, gunfire reportedly left several people dead and injured. So far, 30 i...", "account": "JawadYousufxai", "date": "2026-03-01T11:19:47.000Z", "url": "https://x.com/JawadYousufxai/status/2028067674643681498" }, { "loc": "Kunar", "lat": 34.8467, "lon": 71.0973, "country": "afghanistan", "text": "Visuals from Pakistani airstrikes today morning on an Afghan Taliban provincial headquarters in Nari district of Kunar province:", "account": "OSPSF", "date": "2026-03-01T11:19:54.000Z", "url": "https://x.com/OSPSF/status/2028067702737342682" }, { "loc": "Quetta", "lat": 30.1798, "lon": 66.975, "country": "pakistan", "text": "Today, militants affiliated with FAK/FAH backed by the Afghan Taliban regime attempted to deploy two rudimentary suicide drones in Quetta.   Both drones were successfully detected and neutralized thro...", "account": "OSPSF", "date": "2026-03-01T11:27:56.000Z", "url": "https://x.com/OSPSF/status/2028069724521640274" }, { "loc": "Iran", "lat": 32.4279, "lon": 53.688, "country": "iran", "text": "The UAE’s Defence Ministry has said Iran fired 137 missiles and 209 drones at the country on Saturday.", "account": "War_Analysts", "date": "2026-03-01T11:14:25.000Z", "url": "https://x.com/War_Analysts/status/2028066320575545672" }, { "loc": "Torkham", "lat": 34.1034, "lon": 71.0936, "country": "afghanistan", "text": "Reports were received about an Afghan tank advancing toward the border near the Khyber–Torkham crossing. Upon detecting the movement, security forces responded immediately. As the tank approached clos...", "account": "War_Analysts", "date": "2026-03-01T11:31:00.000Z", "url": "https://x.com/War_Analysts/status/2028070494184829175" }, { "loc": "Kabul", "lat": 34.5553, "lon": 69.2075, "country": "afghanistan", "text": "According to Afghan media, the Afghan Taliban have claimed to launch a large-scale military operation targeting Pakistani forces along the border.  These claims are entirely fictional and propaganda. ...", "account": "zarrar_11PK", "date": "2026-03-01T11:13:48.000Z", "url": "https://x.com/zarrar_11PK/status/2028066165327811058" }, { "loc": "Pakistan", "lat": 30.3753, "lon": 69.3451, "country": "pakistan", "text": "Pakistan destroyed Afghan Taliban vehicle attacking Pakistan at Angor Ada border.", "account": "Irves_Watch", "date": "2026-03-01T09:58:24.000Z", "url": "https://x.com/Irves_Watch/status/2028047192020172818" }, { "loc": "Karachi", "lat": 24.8607, "lon": 67.0011, "country": "pakistan", "text": "Patriots,  Did you remember ISI's role in post-9/11?   Pakistan is playing double omce again with the USA  @realDonaldTrump  .   ISI hosting IRGC to commanders in military headquarters and now unleash...", "account": "miryar_baloch", "date": "2026-03-01T09:50:56.000Z", "url": "https://x.com/miryar_baloch/status/2028045314582835212" }, { "loc": "Afghanistan", "lat": 33.9391, "lon": 67.7099, "country": "afghanistan", "text": "Terrorism declines After Pakistan’s strikes in Afghanistan    Since Pakistan’s military operations against Taliban strongholds in Afghanistan, TTP terrorism inside Pakistan has sharply diminished. No ...", "account": "Jan_Achakzai", "date": "2026-03-01T09:53:26.000Z", "url": "https://x.com/Jan_Achakzai/status/2028045941266137326" }, { "loc": "Afghanistan", "lat": 33.9391, "lon": 67.7099, "country": "afghanistan", "text": "Mufti Taqi Usmani apologized for earlier remarks that were based on AI-generated false information circulating in Pakistani networks targeting the Taliban and Afghanistan. He retracted his previous cl...", "account": "JawadYousufxai", "date": "2026-03-01T09:34:38.000Z", "url": "https://x.com/JawadYousufxai/status/2028041209566969955" }, { "loc": "Pakistan", "lat": 30.3753, "lon": 69.3451, "country": "pakistan", "text": "UN office set on fire in Skardu, Pakistan as thousands protest against the killing of Iran's Supreme leader.", "account": "SouthAsiaIndex", "date": "2026-03-01T09:37:51.000Z", "url": "https://x.com/SouthAsiaIndex/status/2028042021949116747" }, { "loc": "Karachi", "lat": 24.8607, "lon": 67.0011, "country": "pakistan", "text": "Absolutely stand with the Sindh government and law enforcement in condemning the violent attack on the U.S. Consulate in Karachi. These sectarian extremists, incited by foreign loyalties, threaten Pak...", "account": "thewirepak", "date": "2026-03-01T09:45:15.000Z", "url": "https://x.com/thewirepak/status/2028043882450289099" }, { "loc": "Iran", "lat": 32.4279, "lon": 53.688, "country": "iran", "text": "President Pezeshkian warns Iran will fulfill its duty to retaliate for the killing of its leaders. Iranian President Masoud Pezeshkian says seeking revenge for the killing of Khamenei and other senior...", "account": "Global_Decipher", "date": "2026-03-01T09:34:11.000Z", "url": "https://x.com/Global_Decipher/status/2028041097390575662" }, { "loc": "Tehran", "lat": 35.6892, "lon": 51.389, "country": "iran", "text": "Plumes of smoke rise over Tehran following Israeli airstrikes on the Iranian capital.", "account": "Global_Decipher", "date": "2026-03-01T09:48:22.000Z", "url": "https://x.com/Global_Decipher/status/2028044665866612879" }, { "loc": "Afghanistan", "lat": 33.9391, "lon": 67.7099, "country": "afghanistan", "text": "ALERT: A UAV from Afghanistan was brought down by the air-defence system after it was intercepted in Quetta, Balochistan province. There were no immediate reports of damages, officials told The Khoras...", "account": "khorasandiary", "date": "2026-03-01T09:53:52.000Z", "url": "https://x.com/khorasandiary/status/2028046052566388783" }, { "loc": "Quetta", "lat": 30.1798, "lon": 66.975, "country": "pakistan", "text": "Breaking News: Afghan forces carried out airstrikes targeting the 12th Corps in Quetta, along the Durand Line frontier. These strikes are a retaliatory response to last night’s bombing by the Pakistan...", "account": "News_File3", "date": "2026-03-01T09:33:53.000Z", "url": "https://x.com/News_File3/status/2028041022354215171" }, { "loc": "Bagram", "lat": 34.9461, "lon": 69.265, "country": "afghanistan", "text": "Pakistan Targets Bagram Airbase in Early-Morning Operation  In the early morning on 1st March right after Fajr prayers, #Pakistan struck the heart of #Afghanistan’s military, Bagram Airbase, in a deva...", "account": "pakafghanmatter", "date": "2026-03-01T09:51:16.000Z", "url": "https://x.com/pakafghanmatter/status/2028045398686990751" }, { "loc": "Karachi", "lat": 24.8607, "lon": 67.0011, "country": "pakistan", "text": "US delta force and snipers k!lled dozens of peaceful Pakistani  protesters inside US consulate Karachi, Now IRAN must bomb the safe houses  of CIA agents living inside GHQ Pak army. We want revenge of...", "account": "Fati_0nline", "date": "2026-03-01T09:40:18.000Z", "url": "https://x.com/Fati_0nline/status/2028042638897643589" }, { "loc": "Pakistan", "lat": 30.3753, "lon": 69.3451, "country": "pakistan", "text": "Pakistan is temu version of Israel and the Asim Khanzeer is the Netanyahu of Asia .", "account": "Fati_0nline", "date": "2026-03-01T09:45:13.000Z", "url": "https://x.com/Fati_0nline/status/2028043875101610333" }, { "loc": "Karachi", "lat": 24.8607, "lon": 67.0011, "country": "pakistan", "text": "𝗞𝗮𝗿𝗮𝗰𝗵𝗶 𝗣𝗿𝗼𝘁𝗲𝘀𝘁 𝗢𝘃𝗲𝗿 𝗜𝗿𝗮𝗻 𝗦𝘁𝗿𝗶𝗸𝗲𝘀 𝗧𝘂𝗿𝗻𝘀 𝗗𝗲𝗮𝗱𝗹𝘆 𝗮𝘁 𝗨.𝗦. 𝗖𝗼𝗻𝘀𝘂𝗹𝗮𝘁𝗲 Shia protesters in Karachi, some carrying the flag of the Zainabiyoun Brigade (a Pakistan-recruited Shia militia linked to Iran’s IRGC ...", "account": "AfghanAnalyst2", "date": "2026-03-01T08:15:12.000Z", "url": "https://x.com/AfghanAnalyst2/status/2028021222030680320" }, { "loc": "Pakistan", "lat": 30.3753, "lon": 69.3451, "country": "pakistan", "text": "Imamia Students Organization Pakistan will hold protests against the US & isreal in the Parachinar area of Kurram. The Protest aims to condemn the recent aggression against Iran. The procession began ...", "account": "JawadYousufxai", "date": "2026-03-01T08:35:11.000Z", "url": "https://x.com/JawadYousufxai/status/2028026249717637550" }, { "loc": "Pakistan", "lat": 30.3753, "lon": 69.3451, "country": "pakistan", "text": "Imamia Students Organization Pakistan will hold protests against the US & isreal in the Parachinar area of Kurram. The Protest aims to condemn the recent aggression against Iran. The procession began ...", "account": "JawadYousufxai", "date": "2026-03-01T08:30:29.000Z", "url": "https://x.com/JawadYousufxai/status/2028025066751991874" }, { "loc": "Pakistan", "lat": 30.3753, "lon": 69.3451, "country": "pakistan", "text": "Imamia Students Organization Pakistan will hold protests against the US & isreal in the Parachinar area of Kurram. The Protest aims to condemn the recent aggression against Iran. The procession began ...", "account": "JawadYousufxai", "date": "2026-03-01T08:18:07.000Z", "url": "https://x.com/JawadYousufxai/status/2028021954545131678" }, { "loc": "Karachi", "lat": 24.8607, "lon": 67.0011, "country": "pakistan", "text": "Situation is under control. A small number of individuals who managed to barge inside have now been removed and dispersed.  -Karachi Police Chief Azad Khan", "account": "rizwanghilzai", "date": "2026-03-01T08:24:23.000Z", "url": "https://x.com/rizwanghilzai/status/2028023531238494279" }, { "loc": "Karachi", "lat": 24.8607, "lon": 67.0011, "country": "pakistan", "text": "Just IN: Protesters in Karachi, Pakistan have breached the U.S Consulate and have occupied the building.  — Pakistan is home to second largest shia population in the world after the Islamic Republic o...", "account": "SouthAsiaIndex", "date": "2026-03-01T08:34:16.000Z", "url": "https://x.com/SouthAsiaIndex/status/2028026018464993583" }, { "loc": "Tehran", "lat": 35.6892, "lon": 51.389, "country": "iran", "text": "Major airstrikes in Tehran happening right now:", "account": "OSPSF", "date": "2026-03-01T08:28:32.000Z", "url": "https://x.com/OSPSF/status/2028024574227742749" }, { "loc": "Iran", "lat": 32.4279, "lon": 53.688, "country": "iran", "text": "Sirens sound in the Haifa, northern Israel following the launch of ballistic missiles from Iran.", "account": "zarrar_11PK", "date": "2026-03-01T08:13:43.000Z", "url": "https://x.com/zarrar_11PK/status/2028020848683057203" }, { "loc": "Tehran", "lat": 35.6892, "lon": 51.389, "country": "iran", "text": "Israel says ‘the heart of Tehran’ struck.", "account": "Global_Decipher", "date": "2026-03-01T08:27:06.000Z", "url": "https://x.com/Global_Decipher/status/2028024214587130146" }, { "loc": "Tehran", "lat": 35.6892, "lon": 51.389, "country": "iran", "text": "Israel says ‘the heart of Tehran’ struck. x.com/Global_Deciphe…", "account": "Global_Decipher", "date": "2026-03-01T08:29:52.000Z", "url": "https://x.com/Global_Decipher/status/2028024913119097033" }, { "loc": "Tehran", "lat": 35.6892, "lon": 51.389, "country": "iran", "text": "The Israeli military says it has struck “the heart of Tehran” for the first time since the latest US-Israeli attacks started.", "account": "Global_Decipher", "date": "2026-03-01T08:33:34.000Z", "url": "https://x.com/Global_Decipher/status/2028025841142444192" }, { "loc": "Iran", "lat": 32.4279, "lon": 53.688, "country": "iran", "text": "ALERT:  Iran Outlines Transitional Leadership Following Death of Supreme Leader Ayatollah Ali Khamenei According to Iranian state media, Mohammad Mokhber, a senior official, announced that the respons...", "account": "Global_Decipher", "date": "2026-03-01T08:34:45.000Z", "url": "https://x.com/Global_Decipher/status/2028026141441916937" }, { "loc": "Islamabad", "lat": 33.6844, "lon": 73.0479, "country": "pakistan", "text": "6 Dead So Far As Clashes Erupt Across Pakistan During Protests Linked to Khamenei’s Killing    Protests held across multiple cities in Pakistan on Sunday escalated into violent clashes, leaving severa...", "account": "khorasandiary", "date": "2026-03-01T08:36:13.000Z", "url": "https://x.com/khorasandiary/status/2028026508795597126" }, { "loc": "Pakistan", "lat": 30.3753, "lon": 69.3451, "country": "pakistan", "text": "BREAKING NEWS   Recently, photos have been released showing that Pakistan and Israel conducted joint intelligence exercises against Iran some time ago.", "account": "sHaidarHashmi", "date": "2026-03-01T08:13:57.000Z", "url": "https://x.com/sHaidarHashmi/status/2028020904387658115" }, { "loc": "Pakistan", "lat": 30.3753, "lon": 69.3451, "country": "pakistan", "text": "The mission that we have is to prevent a militant Islamic regime from meeting up with nuclear weapons. The first is called IRAN & the second is called PAKISTAN  -International Terrorist Netanyahu", "account": "rizwanghilzai", "date": "2026-03-01T07:26:26.000Z", "url": "https://x.com/rizwanghilzai/status/2028008947794555033" }, { "loc": "Iran", "lat": 32.4279, "lon": 53.688, "country": "iran", "text": "Thousand in Isfahan gather to mourn the death of Iran's Supreme leader Ali Khamenei in US-Israeli strikes.   — Mourners pledge to avenge death of Supreme Leader amid the slogans of 'Death to America a...", "account": "SouthAsiaIndex", "date": "2026-03-01T07:08:16.000Z", "url": "https://x.com/SouthAsiaIndex/status/2028004374740414549" }, { "loc": "UAE", "lat": 23.4241, "lon": 53.8478, "country": "uae", "text": "Iranian strike on an industrial area in the UAE, causing a major fire:", "account": "OSPSF", "date": "2026-03-01T07:29:51.000Z", "url": "https://x.com/OSPSF/status/2028009808117567938" }, { "loc": "Karachi", "lat": 24.8607, "lon": 67.0011, "country": "pakistan", "text": "BREAKING  Protesters broke through the security barricades and entered the U.S.  Consulate in #Karachi, #Pakistan", "account": "bahott_baloch", "date": "2026-03-01T07:02:33.000Z", "url": "https://x.com/bahott_baloch/status/2028002939252494433" }, { "loc": "Kabul", "lat": 34.5553, "lon": 69.2075, "country": "afghanistan", "text": "UPDATE: Pakistan conducted multiple airstrikes at dawn today on Bagram Airbase, located north of Kabul, Afghanistan, the country’s largest military installation.", "account": "Global_Decipher", "date": "2026-03-01T07:30:22.000Z", "url": "https://x.com/Global_Decipher/status/2028009937327071416" }, { "loc": "Karachi", "lat": 24.8607, "lon": 67.0011, "country": "pakistan", "text": "BREAKING NEWS   Large-scale protests have erupted in Karachi. Protesters reportedly entered the U.S. Consulate in Karachi. Videos circulating online appear to show one demonstrator holding the flag of...", "account": "News_File3", "date": "2026-03-01T07:15:57.000Z", "url": "https://x.com/News_File3/status/2028006308293578782" }, { "loc": "Karachi", "lat": 24.8607, "lon": 67.0011, "country": "pakistan", "text": "BREAKING NEWS   US Consulate in Karachi, Pakistan, is now under attack by protesters.", "account": "sHaidarHashmi", "date": "2026-03-01T07:18:20.000Z", "url": "https://x.com/sHaidarHashmi/status/2028006909966508277" }, { "loc": "Karachi", "lat": 24.8607, "lon": 67.0011, "country": "pakistan", "text": "JUST IN  Large-scale protests have begun in Karachi.  Protesters reportedly entered the U.S. Consulate in the city. In widely circulated video footage, one demonstrator can be seen holding the flag of...", "account": "sHaidarHashmi", "date": "2026-03-01T07:29:15.000Z", "url": "https://x.com/sHaidarHashmi/status/2028009658284204483" }, { "loc": "Afghanistan", "lat": 33.9391, "lon": 67.7099, "country": "afghanistan", "text": "𝗧𝗮𝗹𝗶𝗯𝗮𝗻-𝗔𝗹𝗶𝗴𝗻𝗲𝗱 𝗖𝗹𝗲𝗿𝗶𝗰 𝗖𝗮𝗹𝗹𝘀 𝗝𝗶𝗵𝗮𝗱 𝗔𝗴𝗮𝗶𝗻𝘀𝘁 𝗣𝗮𝗸𝗶𝘀𝘁𝗮𝗻 𝗮 𝗥𝗲𝗹𝗶𝗴𝗶𝗼𝘂𝘀 𝗗𝘂𝘁𝘆   Outspoken senior Taliban-aligned religious scholar Sheikh Abdul Sami Ghaznawi said in a newly released video that Pakistan’s poli...", "account": "samartoor3086", "date": "2026-03-01T06:31:17.000Z", "url": "https://x.com/samartoor3086/status/2027995070234763378" }, { "loc": "Iran", "lat": 32.4279, "lon": 53.688, "country": "iran", "text": "Yazd (Iran): Massive presence of Iranians mourning for martyr Imam Khamenei", "account": "rizwanghilzai", "date": "2026-03-01T06:26:33.000Z", "url": "https://x.com/rizwanghilzai/status/2027993878520053899" }, { "loc": "Iran", "lat": 32.4279, "lon": 53.688, "country": "iran", "text": "Iran just stated that they are going to hit very hard today, harder than they have ever been hit before.   THEY BETTER NOT DO THAT, HOWEVER, BECAUSE IF THEY DO, WE WILL HIT THEM WITH A FORCE THAT HAS ...", "account": "rizwanghilzai", "date": "2026-03-01T05:46:13.000Z", "url": "https://x.com/rizwanghilzai/status/2027983726966411739" }, { "loc": "Afghanistan", "lat": 33.9391, "lon": 67.7099, "country": "afghanistan", "text": "The people of Afghanistan deserve a government chosen by them, one that serves their interests, upholds their rights, and delivers lasting peace.  Under Taliban rule, the country is being pushed towar...", "account": "zarrar_11PK", "date": "2026-03-01T05:47:21.000Z", "url": "https://x.com/zarrar_11PK/status/2027984011033714895" }, { "loc": "Iran", "lat": 32.4279, "lon": 53.688, "country": "iran", "text": "People in Iran mourn following the official announcement of the martyrdom of Grand Ayatollah Imam Khamenei.", "account": "rizwanghilzai", "date": "2026-03-01T04:38:45.000Z", "url": "https://x.com/rizwanghilzai/status/2027966751112368290" }, { "loc": "Iran", "lat": 32.4279, "lon": 53.688, "country": "iran", "text": "Smoke rising from Israel's General Staff building after Iran's retaliatory attacks.", "account": "rizwanghilzai", "date": "2026-03-01T05:03:20.000Z", "url": "https://x.com/rizwanghilzai/status/2027972934099521807" }, { "loc": "Dubai", "lat": 25.2048, "lon": 55.2708, "country": "uae", "text": "Dubai Airport burning again this morning:", "account": "OSPSF", "date": "2026-03-01T04:48:37.000Z", "url": "https://x.com/OSPSF/status/2027969232877797756" }, { "loc": "Iran", "lat": 32.4279, "lon": 53.688, "country": "iran", "text": "Inna Lillahi Wainna Ilaihi Rajioon.  The State of Iran has announced the death of His Excellency the Supreme Leader of Iran, Ayatollah Ali Hosseini Khamenei.  We express our deepest condolences and pr...", "account": "OSPSF", "date": "2026-03-01T04:52:51.000Z", "url": "https://x.com/OSPSF/status/2027970296524009719" }, { "loc": "Iran", "lat": 32.4279, "lon": 53.688, "country": "iran", "text": "My take on Ali Khamenei’s assassination and Iran’s irrational response", "account": "thewirepak", "date": "2026-03-01T04:44:46.000Z", "url": "https://x.com/thewirepak/status/2027968262869553527" }, { "loc": "Afghanistan", "lat": 33.9391, "lon": 67.7099, "country": "afghanistan", "text": "BREAKING AlQaeda is siding with Israel against Iran.  TTP's top Shura Commander Qari Kalid aka Ashna released a video message from Afghanistan, declaring support for Israel against Iran. Dollar surely...", "account": "samartoor3086", "date": "2026-03-01T04:23:52.000Z", "url": "https://x.com/samartoor3086/status/2027963005020115107" }, { "loc": "Bagram", "lat": 34.9461, "lon": 69.265, "country": "afghanistan", "text": "New footage from Bagram Airbase shows thick smoke rising as Pakistani jets carry out targeted strikes.", "account": "zarrar_11PK", "date": "2026-03-01T03:19:24.000Z", "url": "https://x.com/zarrar_11PK/status/2027946779690344693" }, { "loc": "Bagram", "lat": 34.9461, "lon": 69.265, "country": "afghanistan", "text": "Eyewitnesses say Pakistani airstrikes have caused significant destruction at Bagram Airbase.", "account": "zarrar_11PK", "date": "2026-03-01T03:24:23.000Z", "url": "https://x.com/zarrar_11PK/status/2028048035087732952" }, { "loc": "Tehran", "lat": 35.6892, "lon": 51.389, "country": "iran", "text": "ALERT: Iranian state media says that several senior Iranian officials, including a close adviser to Supreme Leader ​Ayatollah Ali Khamenei and the commander of the Islamic Revolutionary Guard Corps, w...", "account": "khorasandiary", "date": "2026-03-01T03:18:12.000Z", "url": "https://x.com/khorasandiary/status/2027946476941525379" }, { "loc": "Iran", "lat": 32.4279, "lon": 53.688, "country": "iran", "text": "#Breaking Iran confirms death of Supreme Leader Khamenei.", "account": "NUQTA31", "date": "2026-03-01T02:22:33.000Z", "url": "https://x.com/NUQTA31/status/2027932472093384838" }, { "loc": "Bagram", "lat": 34.9461, "lon": 69.265, "country": "afghanistan", "text": "Initial reports that Pakistani airstrikes have hit the Taliban at the Bagram airbase in Afghanistan. Multiple strikes took place.", "account": "Natsecjeff", "date": "2026-03-01T02:20:52.000Z", "url": "https://x.com/jsaladcaprese/status/2027932049504661705" }, { "loc": "Bagram", "lat": 34.9461, "lon": 69.265, "country": "afghanistan", "text": "Pakistani airstrikes at Bagram hit Taliban command & weapon depots, weakening their operations & sending a clear message that militants safe havens won’t be tolerated. Specially those who hide behind ...", "account": "Natsecjeff", "date": "2026-03-01T02:23:01.000Z", "url": "https://x.com/ZameerAMalik/status/2027932590045286485" }, { "loc": "Isfahan", "lat": 32.6546, "lon": 51.668, "country": "iran", "text": "US-Israeli strikes hit Isfahan nuclear enrichment facility and IRGC command center.", "account": "OSINT_CMD", "date": "2026-02-28T22:00:00.000Z", "url": "#Isfahan" }, { "loc": "Qom", "lat": 34.6416, "lon": 50.8746, "country": "iran", "text": "Strikes reported on IRGC facilities in Qom, a key religious and military command center.", "account": "OSINT_CMD", "date": "2026-02-28T22:30:00.000Z", "url": "#Qom" }, { "loc": "Bushehr", "lat": 28.9684, "lon": 50.8385, "country": "iran", "text": "Bushehr nuclear power plant area targeted.", "account": "OSINT_CMD", "date": "2026-02-28T23:00:00.000Z", "url": "#Bushehr" }, { "loc": "Karaj", "lat": 35.84, "lon": 50.9391, "country": "iran", "text": "Karaj nuclear centrifuge production facility struck.", "account": "OSINT_CMD", "date": "2026-02-28T23:15:00.000Z", "url": "#Karaj" }, { "loc": "Kermanshah", "lat": 34.3142, "lon": 47.065, "country": "iran", "text": "Missile sites and IRGC installations in Kermanshah province hit.", "account": "OSINT_CMD", "date": "2026-02-28T23:30:00.000Z", "url": "#Kermanshah" }, { "loc": "Tabriz", "lat": 38.08, "lon": 46.2919, "country": "iran", "text": "IRGC facilities in Tabriz, northwest Iran struck.", "account": "OSINT_CMD", "date": "2026-02-28T23:45:00.000Z", "url": "#Tabriz" }, { "loc": "Parchin", "lat": 35.5222, "lon": 51.77, "country": "iran", "text": "Parchin military complex \u2014 alleged weapons research site \u2014 hit.", "account": "OSINT_CMD", "date": "2026-03-01T00:00:00.000Z", "url": "#Parchin" }, { "loc": "Minab", "lat": 27.1069, "lon": 57.0817, "country": "iran", "text": "CRITICAL: Strike hit primary school in Minab. 148 children confirmed killed, 92+ injured.", "account": "OSINT_CMD", "date": "2026-02-28T21:00:00.000Z", "url": "#Minab" }, { "loc": "Beit Shemesh", "lat": 31.7463, "lon": 34.9891, "country": "israel", "text": "Iranian ballistic missiles struck Beit Shemesh, killing 6 and injuring dozens.", "account": "OSINT_CMD", "date": "2026-03-01T06:00:00.000Z", "url": "#BeitShemesh" }, { "loc": "Tel Aviv", "lat": 32.0853, "lon": 34.7818, "country": "israel", "text": "Iranian missile and drone strikes on Tel Aviv. 3+ injured, 40+ buildings damaged.", "account": "OSINT_CMD", "date": "2026-03-01T06:30:00.000Z", "url": "#TelAviv" }, { "loc": "Haifa", "lat": 32.794, "lon": 34.9896, "country": "israel", "text": "Sirens sounded in Haifa following launch of ballistic missiles from Iran.", "account": "OSINT_CMD", "date": "2026-03-01T08:13:00.000Z", "url": "#Haifa" }, { "loc": "Manama", "lat": 26.2285, "lon": 50.586, "country": "bahrain", "text": "US Navy 5th Fleet HQ in Bahrain targeted by Iranian missile strike. Minor injuries reported.", "account": "OSINT_CMD", "date": "2026-03-01T05:00:00.000Z", "url": "#Manama" }, { "loc": "Al Udeid", "lat": 25.1174, "lon": 51.315, "country": "qatar", "text": "Al Udeid Air Base in Qatar struck by Iranian missiles.", "account": "OSINT_CMD", "date": "2026-03-01T05:15:00.000Z", "url": "#AlUdeid" }, { "loc": "Kuwait", "lat": 29.2116, "lon": 47.5525, "country": "kuwait", "text": "Al Salem Air Base in Kuwait struck. Limited damage, no deaths reported.", "account": "OSINT_CMD", "date": "2026-03-01T05:30:00.000Z", "url": "#Kuwait" }, { "loc": "Amman", "lat": 31.9454, "lon": 35.9284, "country": "jordan", "text": "Jordan intercepted 49 Iranian drones and missiles over its airspace.", "account": "OSINT_CMD", "date": "2026-03-01T05:45:00.000Z", "url": "#Amman" }, { "loc": "Baghdad", "lat": 33.3128, "lon": 44.3615, "country": "iraq", "text": "US-linked military bases in Iraq struck by Iranian missiles.", "account": "OSINT_CMD", "date": "2026-03-01T06:00:00.000Z", "url": "#Baghdad" }, { "loc": "Damascus", "lat": 33.5138, "lon": 36.2765, "country": "syria", "text": "US-linked sites in Syria struck. 4 civilians killed.", "account": "OSINT_CMD", "date": "2026-03-01T06:15:00.000Z", "url": "#Damascus" }, { "loc": "Strait of Hormuz", "lat": 26.5944, "lon": 56.4667, "country": "iran", "text": "Iran declared closure of Strait of Hormuz. First tanker 'Sky Light' attacked by Iranian forces.", "account": "OSINT_CMD", "date": "2026-03-01T10:00:00.000Z", "url": "#Hormuz" }, { "loc": "Al Dhafra", "lat": 24.2482, "lon": 54.5474, "country": "uae", "text": "Al Dhafra Air Base in UAE struck.", "account": "OSINT_CMD", "date": "2026-03-01T04:30:00.000Z", "url": "#AlDhafra" }, { "loc": "Duqm", "lat": 19.6644, "lon": 57.7028, "country": "oman", "text": "Oman | Iran targets Duqm port in the Sultanate of Oman with a drone.", "account": "Hamid_alqawsi", "date": "2026-03-01T12:41:20.000Z", "url": "https://x.com/Hamid_alqawsi/status/2028088195640971661" }, { "loc": "Doha", "lat": 25.2854, "lon": 51.531, "country": "qatar", "text": "Qatar | Iran targets the capital #Doha and its international airport.", "account": "Hamid_alqawsi", "date": "2026-03-01T12:54:16.000Z", "url": "https://x.com/Hamid_alqawsi/status/2028091448470458747" }, { "loc": "Erbil", "lat": 36.1901, "lon": 44.009, "country": "iraq", "text": "Another Iranian missile hit at US base in Erbil.", "account": "Irves_Watch", "date": "2026-03-01T11:34:44.000Z", "url": "https://x.com/Irves_Watch/status/2028071435697111186" }, { "loc": "Skardu", "lat": 35.3247, "lon": 75.5463, "country": "pakistan", "text": "#Pakistan Protesters in Skardu set fire to the residence and office of the 62 Brigade at the Brigade Headquarters, killing one soldier and injuring a Major-rank officer. Furthermore, Army Public School (APS) along with SP office was also set on fire.", "account": "bahott_baloch", "date": "2026-03-01T12:40:49.000Z", "url": "https://x.com/bahott_baloch/status/2028088065550663815" }];
+
+        function initMap() {
+            osintMap = L.map('osintMap').setView([28.0, 60.0], 4);
+            L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+                attribution: '&copy; CartoDB',
+                subdomains: 'abcd',
+                maxZoom: 19
+            }).addTo(osintMap);
+
+            markers = L.layerGroup().addTo(osintMap);
+            updateMapAndFeed('all');
+
+            document.getElementById('mapFilter').addEventListener('change', (ev) => {
+                updateMapAndFeed(ev.target.value);
+            });
+        }
+
+        function getMarkerColor(country) {
+            var colors = { pakistan: '#22c55e', afghanistan: '#ef4444', iran: '#a855f7', israel: '#3b82f6', uae: '#f59e0b', bahrain: '#f97316', qatar: '#06b6d4', kuwait: '#eab308', jordan: '#84cc16', iraq: '#14b8a6', syria: '#f43f5e' };
+            return colors[country] || '#06b6d4';
+        }
+
+        function updateMapAndFeed(filterVal) {
+            markers.clearLayers();
+            const feed = document.getElementById('newsFeed');
+            feed.innerHTML = '';
+
+            let filtered = mapEvents;
+            if (filterVal !== 'all') {
+                filtered = mapEvents.filter(e => e.country === filterVal);
+            }
+
+            document.getElementById('feedCount').textContent = filtered.length + ' events ' + (filterVal === 'all' ? '(all regions)' : '(' + filterVal + ')');
+
+            if (filtered.length === 0) {
+                feed.innerHTML = '<div style="color:var(--muted); font-size:12px; text-align:center; padding:40px 20px;">No events found for this region.</div>';
+                return;
+            }
+
+            if (filterVal !== 'all') {
+                const lats = filtered.map(e => e.lat);
+                const lons = filtered.map(e => e.lon);
+                osintMap.fitBounds([
+                    [Math.min(...lats) - 0.5, Math.min(...lons) - 0.5],
+                    [Math.max(...lats) + 0.5, Math.max(...lons) + 0.5]
+                ]);
+            } else {
+                osintMap.setView([28.0, 60.0], 4);
+            }
+
+            let feedHtml = '';
+            filtered.forEach((e, i) => {
+                const color = getMarkerColor(e.country);
+                const marker = L.circleMarker([e.lat, e.lon], {
+                    radius: 8,
+                    fillColor: color,
+                    color: '#fff',
+                    weight: 1,
+                    opacity: 0.9,
+                    fillOpacity: 0.7
+                });
+
+                const popupHtml = '<div style="font-family:Inter,sans-serif;max-width:280px;">' +
+                    '<b style="color:#1a237e;">' + e.loc + '</b><br/>' +
+                    '<span style="font-size:11px;color:#666;">' + e.account + '</span><br/>' +
+                    '<p style="font-size:11px;margin:6px 0;">' + e.text.substring(0, 120) + '...</p>' +
+                    (e.url !== '#' ? '<a href="' + e.url + '" target="_blank" style="font-size:11px;color:#1a237e;">🔗 View Source</a>' : '') +
+                    '</div>';
+                marker.bindPopup(popupHtml);
+                marker.addTo(markers);
+
+                const linkHtml = e.url !== '#'
+                    ? '<a href="' + e.url + '" target="_blank" style="color:#3b82f6;font-size:10px;text-decoration:none;display:inline-block;margin-top:4px;">🔗 View Source Post</a>'
+                    : '';
+
+                const dateStr = e.date ? new Date(e.date).toLocaleString('en-PK', { timeZone: 'Asia/Karachi', hour12: false, month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }) : '';
+
+                feedHtml += '<div style="border-bottom:1px solid rgba(255,255,255,0.05); padding:10px 0;">' +
+                    '<div style="display:flex;justify-content:space-between;align-items:center;">' +
+                    '<span style="color:#3b82f6;font-weight:600;font-size:12px;">' + e.account + '</span>' +
+                    '<span style="font-size:9px;color:var(--muted);">' + dateStr + '</span>' +
+                    '</div>' +
+                    '<div style="display:flex;align-items:center;gap:6px;margin-top:3px;">' +
+                    '<span style="background:' + color + ';width:8px;height:8px;border-radius:50%;display:inline-block;"></span>' +
+                    '<span style="font-size:10px;color:var(--muted);font-weight:500;">' + e.loc + '</span>' +
+                    '</div>' +
+                    '<div style="font-size:11px;color:#94a3b8;margin-top:5px;line-height:1.5;">' + e.text + '</div>' +
+                    linkHtml +
+                    '</div>';
+            });
+            feed.innerHTML = feedHtml;
+        }
+
+
+
+
+        const obs = new IntersectionObserver(entries => {
+            entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('vis'); });
+        }, { threshold: 0.05 });
+        document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+    </script>
+
+    <!-- ═══ FULL-PAGE GEOSPATIAL MAP ═══ -->
+    <div id="mapPage"
+        style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; width:100%; height:100%; z-index:9999; background: var(--bg); overflow: hidden; -webkit-overflow-scrolling: touch;">
+
+        <!-- Top bar -->
+        <div
+            style="display:flex; align-items:center; justify-content:space-between; padding:12px 24px; background: rgba(11,22,40,0.95); border-bottom: 1px solid var(--border); backdrop-filter: blur(12px);">
+            <div style="display:flex; align-items:center; gap:12px;">
+                <span style="font-size:18px;">🗺️</span>
+                <span style="font-weight:700; font-size:15px; color:var(--text);">Geospatial Intelligence Map</span>
+                <span
+                    style="font-size:10px; color:var(--muted); background:rgba(59,130,246,0.15); padding:3px 10px; border-radius:20px;">LIVE
+                    OSINT FEED</span>
+            </div>
+            <div style="display:flex; align-items:center; gap:12px;">
+                <select id="mapFilter"
+                    style="background: var(--card); color: var(--text); border: 1px solid var(--border); border-radius: 8px; padding: 8px 16px; font-size: 12px; outline: none; cursor:pointer;">
+                    <option value="all">🌍 Global / All Regions</option>
+                    <option value="pakistan">🇵🇰 Pakistan</option>
+                    <option value="afghanistan">🇦🇫 Afghanistan</option>
+                    <option value="iran">🇮🇷 Iran</option>
+                    <option value="israel">🇮🇱 Israel</option>
+                    <option value="uae">🇦🇪 UAE</option>
+                    <option value="bahrain">🇧🇭 Bahrain</option>
+                    <option value="qatar">🇶🇦 Qatar</option>
+                    <option value="kuwait">🇰🇼 Kuwait</option>
+                    <option value="jordan">🇯🇴 Jordan</option>
+                    <option value="iraq">🇮🇶 Iraq</option>
+                    <option value="syria">🇸🇾 Syria</option>
+                </select>
+                <button onclick="hideMapPage()"
+                    style="background:rgba(239,68,68,0.15); border:1px solid rgba(239,68,68,0.3); color:#ef4444; padding:8px 18px; border-radius:8px; cursor:pointer; font-weight:600; font-size:12px; transition:all 0.2s;">
+                    ✕ Close
+                </button>
+            </div>
+        </div>
+
+        <!-- Main content area -->
+        <div class="map-layout"
+            style="display:flex; flex-direction:row; height:calc(100% - 54px); width:100%; overflow:hidden;">
+
+            <!-- Map takes 65% -->
+            <div style="flex:0 0 65%; position:relative;">
+                <div id="osintMap" style="width:100%; height:100%;"></div>
+                <!-- Legend overlay -->
+                <div
+                    style="position:absolute; bottom:20px; left:20px; background:rgba(11,22,40,0.9); border:1px solid var(--border); border-radius:10px; padding:12px 16px; font-size:10px; color:var(--muted); z-index:1000; backdrop-filter:blur(8px);">
+                    <div style="font-weight:700; margin-bottom:6px; color:var(--text); font-size:11px;">Map Legend</div>
+                    <div style="display:flex; gap:12px; flex-wrap:wrap;">
+                        <span>🟢 Pakistan</span> <span>🔴 Afghanistan</span> <span>🟣 Iran</span> <span>🔵 Israel</span>
+                        <span>🟡 UAE</span> <span>🔵 Global</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- News feed takes 35% -->
+            <div
+                style="flex:0 0 35%; display:flex; flex-direction:column; border-left:1px solid var(--border); background:rgba(11,22,40,0.6);">
+                <div style="padding:14px 18px; border-bottom:1px solid var(--border);">
+                    <div style="font-weight:700; font-size:13px; color:var(--text);">📡 Intelligence Feed</div>
+                    <div id="feedCount" style="font-size:10px; color:var(--muted); margin-top:2px;">Loading events...
+                    </div>
+                </div>
+                <div id="newsFeed" style="flex:1; overflow-y:auto; padding:8px 14px;">
+                    <!-- News items populated by JS -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>
